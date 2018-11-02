@@ -60,7 +60,6 @@
 
 				
 			</ul>
-			<button open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">获取手机号</button> 
 		</div>
 		
 
@@ -72,7 +71,7 @@
 </template>
 
 <script>
-import {getDetail} from './srevice.js';
+
 export default {
   data () {
     return {
@@ -82,28 +81,14 @@ export default {
   },
 
   methods: {
-    bindViewTap () {
-      const url = '../logs/main'
-      wx.navigateTo({ url })
-    },
+
     getPhoneNumber(e) { 
 		console.log(e.detail.errMsg) 
 		console.log(e.detail.iv) 
 		console.log(e.detail.encryptedData) 
 	}, 
     
-    getUserInfo () {
-      // 调用登录接口
-      wx.login({
-        success: () => {
-          wx.getUserInfo({
-            success: (res) => {
-              this.userInfo = res.userInfo
-            }
-          })
-        }
-      })
-    },
+
     _getDetail(){
 		
     	getDetail({id:'64'}).then((res)=>{
@@ -120,9 +105,7 @@ export default {
   },
 
   created () {
-  //	this._getDetail();
-    // 调用应用实例的方法获取全局数据
-    this.getUserInfo()
+
   }
 }
 </script>
