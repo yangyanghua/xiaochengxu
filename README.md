@@ -1,6 +1,6 @@
 # quick
 
-> 快看小程序
+> 小程序
 
 ## Build Setup
 
