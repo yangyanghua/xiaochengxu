@@ -1,222 +1,259 @@
 <template>
 	<div class="main-content">
-		<div class="header">
-			<div class="heItem seach">
-				<span class="btn seachBtn">
-					<image class="imgs" src="../../static/img/icon_search2x.png"/>
-				</span>	
-			</div>
-			<div class="heItem con">
-				<span class="btn likeBtn">关注</span>	
-			</div>
-			<div class="heItem con">
-				<span class="btn">发现</span>	
-			</div>
-			<div class="heItem con">
-				<span class="btn">热门</span>	
-			</div>
-			<div class="heItem map">
-				<span class="btn ">地图</span>	
-			</div>			
-		</div>
-		
-		<div class="img-content">
-			<ul class="img-list">
-				<li class="img-item">
-					<image class="img" src="../../static/img/01.jpg"/>
-					<div class="imgInfo">
-						<p class="comment">南方公园：真理之杖</p>
-						<div class="userInfo">
-							<div class="userImg">
-								<span>
-									<image class="img" mode="scaleToFill" src="../../static/img/01.jpg"/>
-								</span>
-							</div>
-							<div  class="infodetail">
-								<p class="name">卡尔曼•埃里克</p>
-								<p class="date">2018-06-15 16:20</p>
-							</div>
-						</div>
+		<official-account  ></official-account>
+		<div class="top-bar">
+			<image class="top-iocn" src="../../static/img/erc.jpg" />
+
+			<div class="form-content">
+				<div class="form-item">
+					<div class="input-box">
+						<input class="seachInput" placeholder="钢琴品牌" />
 					</div>
-				</li>
-
-				<li class="img-item">
-					<image class="img"  mode="scaleToFill" src="../../static/img/02.jpg" />
-					<div class="imgInfo">
-						<p class="comment">南方公园：真理之杖</p>
-						<div class="userInfo">
-							<div class="userImg">
-								<span>
-									<image class="img" src="../../static/img/01.jpg"/>
-								</span>
-							</div>
-							<div  class="infodetail">
-								<p class="name">卡尔曼•埃里克</p>
-								<p class="date">2018-06-15 16:20</p>
-							</div>
-						</div>
+					<div class="btn-box">
+						<image class="seach-iocn" src="../../static/img/seach1.png" />
 					</div>
-				</li>	
+				</div>
+				<div class="form-item">
+					<div class="input-box">
+						<input class="seachInput" placeholder="钢琴编号" />
+					</div>
+					<div class="btn-box" @tap="codeTest" >
+						<image class="seach-iocn" src="../../static/img/code.png" />
+					</div>
+				</div>
 
-				
-			</ul>
+			</div>
+
 		</div>
-		
 
+		<div class="bot-content">
+
+			<button class="submit-btn" hover-class="active">开始查询</button>
+
+			<div class="info-content">
+
+				<div class="title">
+					查询结果
+				</div>
+				<ul class="info">
+					<li class="info-item">
+						<div class="lable-txt">
+							钢琴品牌：
+						</div>
+						<div class="value-txt">
+							珠江
+						</div>
+					</li>
+
+					<li class="info-item">
+						<div class="lable-txt">
+							钢琴描述：
+						</div>
+						<div class="value-txt">
+							珠江XXX直立式A20E
+						</div>
+					</li>
+					<li class="info-item">
+						<div class="lable-txt">
+							钢琴颜色：
+						</div>
+						<div class="value-txt">
+							黑色
+						</div>
+					</li>
+					<li class="info-item">
+						<div class="lable-txt">
+							钢琴生产商：
+						</div>
+						<div class="value-txt">
+							广州珠江钢琴制造有限公司
+						</div>
+					</li>
+					<li class="info-item">
+						<div class="lable-txt">
+							钢琴经销商：
+						</div>
+						<div class="value-txt">
+							雅乐琴行
+						</div>
+					</li>
+					<li class="info-item">
+						<div class="lable-txt">
+							钢琴经销商商业登记号：
+						</div>
+						<div class="value-txt">
+							A21313R5321321321TDSF2
+						</div>
+					</li>
+				</ul>
+
+			</div>
+
+		</div>
 
 	</div>
 
-	
-	
 </template>
 
 <script>
+	export default {
+		data() {
+			return {
+				motto: 'Hello World',
+				userInfo: {}
+			}
+		},
 
-export default {
-  data () {
-    return {
-      motto: 'Hello World',
-      userInfo: {}
-    }
-  },
+		methods: {
+			test(val){
+				console.log(val);
+			},
+			codeTest(){
 
-  methods: {
+				wx.scanCode({
+				  success (res) {
+				    console.log(res);
+				    
+				  }
+				})
 
-    getPhoneNumber(e) { 
-		console.log(e.detail.errMsg) 
-		console.log(e.detail.iv) 
-		console.log(e.detail.encryptedData) 
-	}, 
-    
+			}
+			
+		},
 
-    _getDetail(){
-		
-    	getDetail({id:'64'}).then((res)=>{
-    		console.log(res);
-    		
-    	}).catch((res)=>{
-    		console.log(res);
-    	})
-    },
-    
-    clickHandle (msg, ev) {
-      console.log('clickHandle:', msg, ev)
-    }
-  },
+		created() {
 
-  created () {
-
-  }
-}
+		}
+	}
 </script>
 
 <style lang="scss" scoped>
-	
 	.main-content {
-		background: #f1f1f1;
-		height: 100%;
+		background: #f8f8f8;
+		box-sizing: border-box;
+		padding-bottom: 30px;
+		min-height: 100vh;
 	}
 	
-	.header {
-		padding: 0 10px;
-		height: 40px;
-		display: flex;
-		box-sizing: border-box; 
+	.top-bar {
+		position: relative;
+		height: 190px;
 		width: 100%;
-		background: #fff;
-		.seach {
-			flex: 2;
-			text-align: left;
+		text-align: center;
+		background: #58a1ff;
+		.top-iocn {
+			height: 90px;
+			width: 90px;
+			margin-top: 10px;
+			border-radius: 50%;
 		}
-		.con {
-			flex: 1;
-			text-align: center;
-		}
-		.btn {
-			display: block;
-			height: 40px;
-			line-height: 40px;
-			font-size: 13px;
-			color: #333;
-			.imgs {
-				height: 20px;
-				width: 20px;
-				margin-top: 10px;
+		.form-content {
+			position: absolute;
+			bottom: -85px;
+			left: 50%;
+			margin-left: -47%;
+			width: 94%;
+			height: 170px;
+			background: #fff;
+			border-radius: 8px;
+			box-shadow: 0 0 15px -4px #000;
+			.form-item {
+				display: flex;
+				height: 50px;
+				line-height: 50px;
+				width: 95%;
+				overflow: hidden;
+				border-radius: 100px;
+				background: #f8f8f8;
+				margin: auto;
+				margin-top: 25px;
+				.input-box {
+					flex: 5;
+					padding: 0 15px;
+					.seachInput {
+						text-align: left;
+						height: 50px;
+						line-height: 50px;
+						font-size: 14px;
+					}
+				}
+				.btn-box {
+					position: relative;
+					flex: 1.2;
+					background: #58a1ff;
+					.seach-iocn {
+						position: absolute;
+						height: 23px;
+						width: 23px;
+						top: 50%;
+						margin-top: -10px;
+						left: 50%;
+						margin-left: -12px;
+					}
+				}
 			}
 		}
-		
-		 .map{
-				flex: 2;
-				text-align: right;
-			}		
-		
 	}
-
-
 	
-	
-.img-content {
-	width: 100%;
-}
-
-.img-list {
-	padding: 10px;
-	box-sizing: border-box;
-	.img-item {
-		display: inline-block;
-		width: 49%;
-		height: auto;
-		margin-left: 1%;
-		background: #FFFFFF;
-	}
-	.img-item .img {
-		width: 100%;
-		.imgInfo {
-			padding: 5px;
+	.bot-content {
+		margin-top: 110px;
+		.submit-btn {
+			background: #58a1ff;
+			color: #fff;
+			width: 300px;
+			border-radius: 100px;
+			&.active {
+				opacity: 0.8;
+			}
+		}
+		.info-content {
+			width: 94%;
+			height: auto;
+			padding-bottom: 20px;
 			background: #fff;
+			border-radius: 8px;
+			box-shadow: 0 0 15px -4px #000;
+			margin: auto;
+			margin-top: 20px;
+			.title {
+				position: relative;
+				height: 40px;
+				line-height: 40px;
+				color: #58a1ff;
+				font-size: 14px;
+				padding: 0 15px;
+				font-weight: bold;
+			}
+			.title::after {
+				position: absolute;
+				content: '';
+				height: 20px;
+				width: 5px;
+				top: 50%;
+				margin-top: -9px;
+				left: 0;
+				background: #58a1ff;
+			}
+			.info {
+				padding: 0 15px;
+				width: 100%;
+				box-sizing: border-box;
+				.info-item {
+					margin-bottom: 3px;
+					box-sizing: border-box;
+					.lable-txt {
+						display: inline-block;
+						font-size: 13px;
+						color: #333;
+						font-weight: bold;
+					}
+					.value-txt {
+						display: inline-block;
+						font-size: 13px;
+						color: #333;
+					}
+				}
+			}
 		}
 	}
-}
-
-
-
-	.imgInfo .comment{
-		font-size: 18px;
-		color: #333;
-		padding: 0 10px;
-	}
-	
-	.imgInfo .userInfo{
-		display: flex;
-		height: 50px;
-		padding: 10px
-	} 
-	.imgInfo .userInfo .userImg{
-		flex: 0 0 50px;
-	}
-	
-	.imgInfo .userInfo .userImg .img{
-		display: block;
-		height: 40px;
-		width: 40px;
-		border-radius:50%;
-		margin-top: 5px;
-		overflow: hidden;
-	}
-	
-	.imgInfo .userInfo .infodetail{
-		flex: 1;
-	}
-	.imgInfo .userInfo .infodetail .name{
-		color: #666;
-		font-size: 12px;
-		margin-top: 5px;
-	}
-	.imgInfo .userInfo .infodetail .date{
-		font-size: 12px;
-		color: #999;
-		margin-top: 5px;		
-	}
-	
-
 </style>

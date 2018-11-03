@@ -23,19 +23,19 @@
 		<div class="nav">
 			<ul class="nav-list">
 				<li class="navitem">
-					<img class="nav-image" src="../../static/img/01.jpg" />
+					<img class="nav-image" src="../../static/img/erc.jpg" />
 					<p class="nav-txt">真伪查询</p>
 				</li>
 				<li class="navitem">
-					<img class="nav-image" src="../../static/img/01.jpg" />
+					<img class="nav-image" src="../../static/img/erc.jpg" />
 					<p class="nav-txt">真伪查询</p>
 				</li>
 				<li class="navitem">
-					<img class="nav-image" src="../../static/img/01.jpg" />
+					<img class="nav-image" src="../../static/img/erc.jpg" />
 					<p class="nav-txt">真伪查询</p>
 				</li>
 				<li class="navitem">
-					<img class="nav-image" src="../../static/img/01.jpg" />
+					<img class="nav-image" src="../../static/img/erc.jpg" />
 					<p class="nav-txt">真伪查询</p>
 				</li>
 
@@ -50,7 +50,7 @@
 
 			<div class="product">
 				<div class="image-box">
-					<img class="pro-image" src="../../static/img/02.jpg" />
+					<img class="pro-image" src="../../static/img/gangqin1.png" />
 				</div>
 				<div class="pro-info">
 					<p class="name"><span class="brand">KAWAI</span>-UPRIGHI &nbsp;&nbsp;X1系列全新立式钢琴，原装进口，家用教学级考试级</p>
@@ -90,9 +90,9 @@
 		data() {
 			return {
 				imgUrls: [
-					'../../static/img/02.jpg',
-					'../../static/img/01.jpg',
-					'../../static/img/02.jpg'
+					'../../static/img/gangqin.png',
+					'../../static/img/gangqin.png',
+					'../../static/img/gangqin.png'
 				],
 				indicatorDots: false,
 				autoplay: 2000,
@@ -194,15 +194,15 @@
 	}
 	
 	.swiperContent {
-		height: 150px;
+		height: 160px;
 		background: #fff;
 	}
 	
 	.slide-image {
 		width: 100%;
-		height: 140px;
+		height: 150px;
 		border-radius: 4px;
-		box-shadow: 0 0 8px 0 #000;
+		box-shadow: 0 0 14px -3px #000;
 	}
 	
 	.image-box {
