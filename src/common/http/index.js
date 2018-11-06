@@ -1,7 +1,8 @@
 import * as api from './api.js';
-import {httpService,http} from './http.js';
+import { requstGet,requstPost} from './http.js';
 export {
-    api,
-    httpService,
-    http,
+	api,
+	requstPost,
+    requstGet
+    
 }

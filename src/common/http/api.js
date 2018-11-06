@@ -1,22 +1,4 @@
 
-	export const getDynamicList  ='/api/v1/dynamic/user/list'  ;//用户动态列表
-	export const getUserDetail  = 	   '/api/v1/user/detail'  ;//用户信息详情
-	export const getDetail  =    '/api/v1/dynamic/detail'  ;//详情
-	export const getGoods  =   '/api/v1/good/list'  ;//赞列表
-	export const phoneLogin  =   '/api/v1/user/login'  ;//手机登陆
-	export const getCode  =   '/api/v1/user/send/sms'  ;//获取验证码
-	export const otherLogin  =   '/api/v1/user/register'  ;//第三方登陆
-	export const collection  =   '/api/v2/dynamic/collection'  ;//收藏
-	export const commentAdd  =   '/api/v1/comment/add'  ;//评论
-	export const goodAdd  =   '/api/v1/good/add'  ;//点赞
-	export const cancleAdd  =   '/api/v1/good/cancle'  ;//取消赞
-	export const getweiboToken  =   '/api/v1/weibo/accesstoken'  ;//获取微博token
-	export const getweixinToken  =   '/api/v1/weixin/accesstoken'  ;//获取微信token
-    export const readRank  =   '/api/v2/dynamic/read/rank'  ;//阅读榜
-    export const fansList  =     '/api/v1/friend/fans/list'  ;//用户粉丝列表
-    export const dynamicPhotoCount  =   '/api/v1/dynamic/dynamicPhotoCount'  ;//用户图
-    export const dynamicList  =   '/api/v2/dynamic/map/user/list'  ;//用户图片
-	export const score  =   '/api/v2/dynamic/score'  ;//用户评分
-	export const cityList  =   '/api/v2/dynamic/city/list'  ;//用户城市照片分类
-	export const countryList  =   '/api/v2/dynamic/country/list'  ;//用户国家照片分类
-	export const scoreList  =     '/api/v1/user/rank/score'  ;//用户评分榜
+export const queryBySn  ='/v1/piano/queryBySn'  ;//编号查钢琴
+export const queryByBrand  ='/v1/piano/queryByBrand'  ;//品牌查钢琴
+

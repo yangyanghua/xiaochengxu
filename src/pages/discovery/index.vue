@@ -2,12 +2,14 @@
 	<div class="main-content">
 		<official-account  ></official-account>
 		<div class="top-bar">
-			<image class="top-iocn" src="../../static/img/erc.jpg" />
+			<div class="top-iocn">
+				<image v-if="img" class="userImg" :src="img" />
+			</div>
 
 			<div class="form-content">
 				<div class="form-item">
 					<div class="input-box">
-						<input class="seachInput" placeholder="钢琴品牌" />
+						<input class="seachInput" v-model="brand"  placeholder="钢琴品牌" />
 					</div>
 					<div class="btn-box">
 						<image class="seach-iocn" src="../../static/img/seach1.png" />
@@ -15,7 +17,7 @@
 				</div>
 				<div class="form-item">
 					<div class="input-box">
-						<input class="seachInput" placeholder="钢琴编号" />
+						<input class="seachInput" v-model="pianoSn" placeholder="钢琴编号" />
 					</div>
 					<div class="btn-box" @tap="codeTest" >
 						<image class="seach-iocn" src="../../static/img/code.png" />
@@ -28,20 +30,22 @@
 
 		<div class="bot-content">
 
-			<button class="submit-btn" hover-class="active">开始查询</button>
-
-			<div class="info-content">
+			<!--<button class="submit-btn" hover-class="active" @tap="submitData" >开始查询</button>-->
+			<button class="submit-btn" v-if="!searchBtnShow"    open-type="getUserInfo" @getuserinfo="bindGetUserInfo">开始查询</button>
+			<button class="submit-btn" v-if="searchBtnShow" hover-class="active" @tap="submitData" >开始查询</button>
+			
+			<div class="info-content" v-if="data.length > 0" >
 
 				<div class="title">
 					查询结果
 				</div>
-				<ul class="info">
+				<ul class="info" v-for="(item,index) in data" :key="index" >
 					<li class="info-item">
 						<div class="lable-txt">
 							钢琴品牌：
 						</div>
 						<div class="value-txt">
-							珠江
+							{{item.brand}}
 						</div>
 					</li>
 
@@ -50,7 +54,7 @@
 							钢琴描述：
 						</div>
 						<div class="value-txt">
-							珠江XXX直立式A20E
+							{{item.des}}
 						</div>
 					</li>
 					<li class="info-item">
@@ -58,7 +62,7 @@
 							钢琴颜色：
 						</div>
 						<div class="value-txt">
-							黑色
+							{{item.color}}
 						</div>
 					</li>
 					<li class="info-item">
@@ -66,7 +70,7 @@
 							钢琴生产商：
 						</div>
 						<div class="value-txt">
-							广州珠江钢琴制造有限公司
+							{{item.factory}}
 						</div>
 					</li>
 					<li class="info-item">
@@ -74,7 +78,7 @@
 							钢琴经销商：
 						</div>
 						<div class="value-txt">
-							雅乐琴行
+							{{item.dealer}}
 						</div>
 					</li>
 					<li class="info-item">
@@ -82,10 +86,12 @@
 							钢琴经销商商业登记号：
 						</div>
 						<div class="value-txt">
-							A21313R5321321321TDSF2
+							{{item.dealerSn}}
 						</div>
 					</li>
 				</ul>
+
+
 
 			</div>
 
@@ -96,18 +102,63 @@
 </template>
 
 <script>
+import {queryByBrand,queryBySn} from './srevice.js'	
 	export default {
 		data() {
 			return {
-				motto: 'Hello World',
-				userInfo: {}
+				userInfo: {},
+				data:[],
+				img:'',
+				pianoSn:'',
+				brand:'',
+				searchBtnShow:false,
 			}
 		},
 
 		methods: {
-			test(val){
-				console.log(val);
+			bindGetUserInfo(e){
+				// console.log(e.mp.detail.userInfo)
+				 this.img  = e.mp.detail.userInfo.avatarUrl;
+				 
 			},
+			submitData(){
+				if(this.pianoSn){
+					this._queryBySn({sn:this.pianoSn});	
+				}else{
+					this._queryByBrand({brand:this.brand});
+				}
+			},
+			
+			_queryBySn(opt){
+				
+				queryBySn(opt).then((res)=>{
+					this.data = [res];
+				}).catch((res)=>{
+					wx.showToast({
+						title: '网络错误',
+						icon: 'none',
+						duration: 2000
+					})						
+				})
+				
+			},
+			
+			_queryByBrand(opt){
+				
+				queryByBrand(opt).then((res)=>{
+					
+					this.data = res;
+					
+				}).catch((res)=>{
+					wx.showToast({
+						title: '网络错误',
+						icon: 'none',
+						duration: 2000
+					})					
+				})
+			},
+
+			
 			codeTest(){
 
 				wx.scanCode({
@@ -120,10 +171,27 @@
 			}
 			
 		},
+		onReady() {
+			let vm = this;
+			wx.getSetting({
+			  success(res) {
+			    if (!res.authSetting['scope.userInfo']) {
+			    	
+			    	vm.searchBtnShow = false;
+			    	
+			    }else{
+			          wx.getUserInfo({
+			            success: function(res) {
+			              //console.log(res.userInfo)
+			              vm.img = res.userInfo.avatarUrl;
+			            }
+			          })
+			    	vm.searchBtnShow = true;
+			    }
+			  }
+			})		
 
-		created() {
-
-		}
+		},
 	}
 </script>
 
@@ -142,10 +210,20 @@
 		text-align: center;
 		background: #58a1ff;
 		.top-iocn {
+			position: absolute;
+			top: 10px;
+			left: 50%;
+			margin-left: -45px;
 			height: 90px;
 			width: 90px;
-			margin-top: 10px;
+			box-shadow: 0 2px 15px -7px #000;
+			background: #F8F8F8;
+			overflow: hidden;
 			border-radius: 50%;
+			.userImg{
+				height: 90px;
+				width: 90px;				
+			}
 		}
 		.form-content {
 			position: absolute;
@@ -156,7 +234,7 @@
 			height: 170px;
 			background: #fff;
 			border-radius: 8px;
-			box-shadow: 0 0 15px -4px #000;
+			box-shadow: 0 0 15px -7px #000;
 			.form-item {
 				display: flex;
 				height: 50px;
@@ -212,7 +290,7 @@
 			padding-bottom: 20px;
 			background: #fff;
 			border-radius: 8px;
-			box-shadow: 0 0 15px -4px #000;
+			box-shadow: 0 0 15px -7px #000;
 			margin: auto;
 			margin-top: 20px;
 			.title {
@@ -237,6 +315,8 @@
 			.info {
 				padding: 0 15px;
 				width: 100%;
+				padding-bottom: 7px;
+				border-bottom:2px solid #F8F8F8;
 				box-sizing: border-box;
 				.info-item {
 					margin-bottom: 3px;
@@ -253,6 +333,10 @@
 						color: #333;
 					}
 				}
+			}
+			.info:last-child{
+				border: none;
+				padding-bottom: 0;
 			}
 		}
 	}

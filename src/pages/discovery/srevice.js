@@ -1,8 +1,10 @@
-import { http, api } from '@/common/http/index.js';
+import {api,requstPost,requstGet} from '@/common/http/index.js';
 import qs from 'qs';
 
-//删除
-export const getDetail = (params = {}) => {
-	return http.get(api.getDetail, {params});
+export const queryByBrand = (params = {}) => {
+	return requstPost(api.queryByBrand, JSON.stringify(params));
 }
-//查询
+
+export const queryBySn = (params = {}) => {
+	return requstPost(api.queryBySn, JSON.stringify(params));
+}
