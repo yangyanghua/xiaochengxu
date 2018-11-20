@@ -11,7 +11,7 @@ export default {
   // 这个字段走 app.json
   config: {
     // 页面前带有 ^ 符号的，会被编译成首页，其他页面可以选填，我们会自动把 webpack entry 里面的入口页面加进去
-    pages: ['pages/index/main','pages/search/main','pages/personal/main','^pages/discovery/main'],
+    pages: ['^pages/index/main','pages/search/main','pages/personal/main','pages/discovery/main'],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
@@ -22,25 +22,25 @@ export default {
 			"backgroundColor": "#fafafa",
 			"borderStyle": 'white',
 			"color":'#333',
-			'selectedColor':"#E70012",
+			'selectedColor':"#519fff",
 			"list": [{
-//				"iconPath": './static/img/home.png',
-//				"selectedIconPath": './static/img/ac-home.png',
+				"iconPath": './static/img/icon_home2x.png',
+				"selectedIconPath": './static/img/icon_home_press2x.png',
 				"pagePath": "pages/index/main",
-				"text": "首页"
+				"text": "首页"			  
 			}, {
-//				"iconPath": './static/img/list.png',
-//				"selectedIconPath": './static/img/ac-list.png',
+				"iconPath": './static/img/icon_search22x.png',
+				"selectedIconPath": './static/img/icon_search2_press2x.png',
 				"pagePath": "pages/search/main",
-				"text": "搜索"
+				"text": "搜索"	
 			},{
-//				"iconPath": './static/img/cart.png',
-//				"selectedIconPath": './static/img/ac-cart.png',
+				"iconPath": './static/img/icon_find2x.png',
+				"selectedIconPath": './static/img/icon_find_press2x.png',
 				"pagePath": "pages/discovery/main",
-				"text": "发现"
+				"text": "发现"		
 			}, {
-//				"iconPath": './static/img/my.png',
-//				"selectedIconPath": './static/img/ac-my.png',
+				"iconPath": './static/img/icon_my2x.png',
+				"selectedIconPath": './static/img/icon_my_press2x.png',
 				"pagePath": "pages/personal/main",
 				"text": "我的"
 			}]

@@ -119,7 +119,7 @@ import {queryByBrand,queryBySn} from './srevice.js'
 			bindGetUserInfo(e){
 				// console.log(e.mp.detail.userInfo)
 				 this.img  = e.mp.detail.userInfo.avatarUrl;
-				 
+				 this.searchBtnShow = true;
 			},
 			submitData(){
 				if(this.pianoSn){
