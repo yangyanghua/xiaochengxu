@@ -6,7 +6,10 @@ app.$mount()
 export default {
   config: {
       backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: '首页',
+      navigationBarBackgroundColor: '#58a1ff',
+      navigationBarTitleText: '钢琴注册',
+      navigationBarTextStyle: '#fff'
   }
 }
+
+
