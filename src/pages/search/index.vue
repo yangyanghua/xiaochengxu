@@ -3,17 +3,46 @@
 		<div class="header">
 			<div class="heItem seach">
 				<div class="btn seachBtn">
-					 <input class="seachInput" placeholder="搜索" auto-focus/>
+					<input class="seachInput" placeholder="搜索" />
 					<image class="search" src="../../static/img/icon_search2x.png" /> 
+					<image class="clearInput" src="../../static/img/icon_delete22x.png" /> 
 				</div>
 			</div>
 			<span class="right-btn" >取消</span>
 		</div>
 		<div class="content-box">
 			
-			
+			<h2 class="title">热门搜索</h2>
+			<div class="btn-box">
+				
+				<button class="word-btn" size="mini"  >珠江牌</button>
+				<button class="word-btn" size="mini"  >珠江牌</button>
+				<button class="word-btn" size="mini"  >珠江牌</button>
+				<button class="word-btn" size="mini"  >珠江牌</button>
+				<button class="word-btn" size="mini"  >珠江牌</button>
+				<button class="word-btn" size="mini"  >珠江牌</button>
+			</div>
+			<h2 class="title">历史搜索</h2>
+			<div class="btn-box">
+				
+				<button class="word-btn" size="mini"  >珠江牌</button>
+				<button class="word-btn" size="mini"  >珠江牌</button>
+				<button class="word-btn" size="mini"  >珠江牌</button>
+				<button class="word-btn" size="mini"  >珠江牌</button>
+				<button class="word-btn" size="mini"  >珠江牌</button>
+				<button class="word-btn" size="mini"  >珠江牌</button>
+			</div>		
+			<h2 class="title">搜索结果</h2>
+			<div class="search-results">				
+					<ul class="results-content">
+						<li class="results-item">
+							<span class="brand-name">品牌</span>
+							<span class="brand-name">生产商</span>
+						</li>
+					</ul>
+					
+			</div>				
 		</div>
-		
 		
 		
 		
@@ -64,7 +93,7 @@ export default {
 <style lang="scss" scoped>
 	
 	.main-content {
-		background: #f1f1f1;
+		padding-top: 35px;
 		height: 100%;
 	}
 	
@@ -93,6 +122,7 @@ export default {
 				.seachInput{
 					display: inline-block;
 					height: 30px;
+					width: 80%;
 					line-height: 30px;
 					font-size: 12px;
 				}
@@ -105,6 +135,14 @@ export default {
 			margin-top: -8px;
 			height: 16px;
 			width: 16px;
+		}
+		.clearInput{
+			position: absolute;
+			height: 16px;
+			width: 16px;
+			top: 50%;
+			margin-top: -8px;
+			right: 10px;
 		}
 		.right-btn{
 			position: absolute;
@@ -119,5 +157,61 @@ export default {
 		}
 	}
 	
+	.content-box{
+		margin-top: 5px;
+		border-top:1px solid #aaa ;
+		padding:0 10px;
+		.title{
+			height: 40px;
+			line-height: 40px;
+			font-size: 15px;
+			color: #333;
+			font-weight: 700;
+		}
+		.word-btn{
+			margin-right: 3px;
+			border-right:1px solid #EEEEEE !important ;
+		}
+	}
+
+	.search-results{
+		width: 100%;
+		box-sizing: border-box;
+		padding-right: 40px;
+		.results-content{
+			width: 100%;
+			height: auto;
+			border: 1px solid #eee;
+			box-sizing: border-box;
+			.results-item{
+				height: 30px;
+				line-height: 30px;
+				display: flex;
+				box-sizing: border-box;
+				border-bottom: 1px solid #eee;
+				.brand-name{
+					flex: 1;
+					line-height: 30px;
+					text-align: center;
+					box-sizing: border-box;
+					border-right:1px solid #eee;
+				}
+				.ent-name{
+					flex: 1;
+					line-height: 30px;
+					text-align: center;
+					box-sizing: border-box;				
+				}
+			}
+			.results-item:last-child{
+				border: none;
+			}
+		}
+	}
+	
+
+
+
+
 
 </style>

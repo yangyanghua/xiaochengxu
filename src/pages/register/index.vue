@@ -1,154 +1,171 @@
 <template>
-	<div class="main-content">
-		<div class="form-content">
-			<div class="form-item blue">
-				<div class="lable-txt">用户姓名</div>
-				<div class="input-box">
-					<input class="reg-input" type="text" placeholder-style="color:#ffffff" placeholder="请输入姓名" />
-				</div>				
-			</div>
-			<div class="form-item">
-				<div class="lable-txt">详细地址</div>
-				<div class="input-box">
-					<input class="reg-input" type="text"  placeholder="请输入详细地址" />
-				</div>				
-			</div>
+	<div class="main-content">		
+	<div class="input-box account">
+		<image src="../../static/img/icon_user2x.png" class="input-icon" />
+		<input class="input-text" placeholder="请输入手机号码" type="text"  />
+	</div>
 
-			<div class="form-item">
-				<div class="lable-txt">发票讯息</div>
-				<div class="input-box">
-					<input class="reg-input" type="text"  placeholder="请输入发票讯息" />
-				</div>				
-			</div>
+	<div class="input-box psd">
+		<image src="../../static/img/icon_verification_code2x.png" class="input-icon" />
+		<input class="input-text" type="password"  placeholder="请输入验证码"  />
+		<span class="txt-btn">获取验证码</span>
+	</div>
 
-			<div class="form-item">
-				<div class="lable-txt">产品编号</div>
-				<div class="input-box">
-					<input class="reg-input" type="text"  placeholder="请输入产品编号" />
-				</div>				
-			</div>
+	<div class="input-box psd">
+		<image src="../../static/img/icon_password2x.png" class="input-icon" />
+		<input class="input-text" type="password"  placeholder="请输入密码"  />
+	</div>
 
-			<div class="form-item">
-				<div class="lable-txt">出售单位</div>
-				<div class="input-box">
-					<input class="reg-input" type="text"  placeholder="请输入出售单位" />
-				</div>				
-			</div>
+	<button class="submit-btn"  hover-class="active" @tap="submitData" >立即注册</button>
+	
 
-			<div class="form-item">
-				<div class="lable-txt">出售地址</div>
-				<div class="input-box">
-					<input class="reg-input" type="text"  placeholder="请输入出售地址" />
-				</div>				
-			</div>
-
-			<div class="form-item">
-				<div class="lable-txt">购琴价格</div>
-				<div class="input-box">
-					<input class="reg-input" type="text"  placeholder="请输入购琴价格" />
-				</div>				
-			</div>
-			<div class="form-item">
-				<div class="lable-txt">购琴日期</div>
-				<div class="input-box">
-					<input class="reg-input" type="text"  placeholder="请输入购琴日期" />
-				</div>				
-			</div>
-
-			<div class="form-item">
-				<div class="lable-txt">选购钢琴的原因</div>
-				<div class="input-box">
-					<input class="reg-input" type="text"  placeholder="请输入选购钢琴的原因" />
-				</div>				
-			</div>
-
-			<div class="form-item">
-				<div class="lable-txt">使用者年龄</div>
-				<div class="input-box">
-					<input class="reg-input" type="text"  placeholder="请输入使用者年龄" />
-				</div>				
-			</div>
-
-			<div class="form-item">
-				<div class="lable-txt">使用者类别</div>
-				<div class="input-box">
-					<input class="reg-input" type="text"  placeholder="请输入使用者年龄" />
-				</div>				
-			</div>
-
-		</div>
-		
-		
-
-
+	<div class="btn-box">
+		   <image src="../../static/img/icon_success_fill2x.png" mode="aspectFit" class="check-icon" />    已阅读并同意 《<span class="txt-btn">用户服务协议</span>》
+	</div>
+	
 
 	</div>
 
 </template>
 
 <script>
-import {queryByBrand,queryBySn} from './srevice.js'	
+	import { getDetail } from './srevice.js';
 	export default {
 		data() {
 			return {
-
+			
 			}
 		},
 
-		methods: {},
-		onReady() {},
+		methods: {
+
+
+		},
+
+		onReady() {
+
+		}
 	}
 </script>
 
 <style lang="scss" scoped>
 	.main-content {
-		background: #fff;
+		background: #f8f9fb;
+		height: 100vh;
+		overflow: hidden;
 		box-sizing: border-box;
-		padding-bottom: 30px;
-		min-height: 100vh;
+		padding-top: 20px;
 	}
-	.form-content{
-		height: auto;
-		.form-item{
-			padding:0 40px;
-			&.blue{
-				background: #519fff;
-				padding-bottom: 10px;
-				.lable-txt{
-					color: #fff;
-				}
-				.input-box{
-					border-bottom: 1px solid #fff;
-				}
-				.reg-input{
-					color: #fff;
-				}
-			}
-			.lable-txt{
-				width: 100%;
-				height: 30px;
-				line-height: 50px;
-				text-align: left;
-				font-size: 12px;
-				color: #333333;
-			}
-			.input-box{
-				height: 40px;
-				line-height: 40px;
-				width: 100%;
-				border-bottom: 1px solid #aaaaaa;
-				.reg-input{
-					height: 40px;
-					line-height: 40px;
-					border: none;
-					outline: none;
-					font-size: 18px;
-				}
-			}
-			
-		}
-	}
-	
 
 	
+	.input-box{
+		position: relative;
+		height: 60px;
+		line-height: 60px;
+		width: 314px;
+		margin: auto;
+		border-radius:100px;
+		padding:0 45px;
+		box-sizing: border-box;
+		margin-bottom: 30px;
+		box-shadow: 0 1px 16px -7px #000;
+		&.psd{
+			padding-right: 100px;
+		}
+		.input-icon{
+			position: absolute;
+			height: 22px;
+			width: 22px;
+			left: 15px;
+			top: 50%;
+		
+			margin-top: -11px;
+		}
+		.input-text{
+			width: 100%;
+			height: 60px;
+			line-height: 60px;
+			border: none;
+			font-size: 14px;
+			outline: none;
+		}
+		.txt-btn{
+			position: absolute;
+			height: 30px;
+			line-height: 30px;
+			font-size: 14px;
+			color: #58a1ff;
+			top: 50%;
+			margin-top: -15px;
+			right: 20px;
+		}
+	}
+
+			.submit-btn {
+			background: #58a1ff;
+			color: #fff;
+			width: 314px;
+			height: 60px;
+			box-shadow: 0 1px 16px -7px #58a1ff;
+			line-height: 60px;
+			font-weight: 700;
+			box-sizing: border-box;
+			border-radius: 100px;
+			&.active {
+				opacity: 0.8;
+			}
+		}	
+		
+		.line-text{
+			position: relative;
+			margin-top: 10px;
+			height: 30px;
+			line-height: 30px;
+			text-align: center;
+			width: 100%;
+			font-size: 16px;
+			color: #999;
+			font-weight: 700;
+			&::after{
+				position: absolute;
+				content: '';
+				height: 1px;
+				background: #999;
+				width: 122px;
+				top: 50%;
+				left: 35px;
+			}
+			&::before{
+				position: absolute;
+				content: '';
+				height: 1px;
+				background: #999;
+				width: 122px;
+				top: 50%;
+				right: 35px;
+			}			
+		}
+		
+		.btn-box{
+			
+			height: 30px;
+			line-height: 30px;
+			width: 314px;
+			margin: auto;
+			margin-top: 20px;
+			text-align: center;
+			font-size: 14px;
+			.check-icon{
+				position: relative;
+				height: 15px;
+				width: 16px;
+				top: 3px;
+				margin-right: 5px;
+			}
+			.txt-btn{
+				
+				text-decoration: underline;
+				color: #58a1ff;				
+			}
+		}
 </style>
