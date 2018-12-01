@@ -37,8 +37,23 @@
 					<ul class="results-content">
 						<li class="results-item">
 							<span class="brand-name">品牌</span>
-							<span class="brand-name">生产商</span>
+							<span class="ent-name">生产商</span>
 						</li>
+						<li class="results-item">
+							<span class="brand-name">珠江</span>
+							<span class="ent-name">河合乐器制作所</span>
+						</li>	
+						<li class="results-item">
+							<span class="brand-name">珠江</span>
+							<span class="ent-name">河合乐器制作所</span>
+						</li>	
+						<li class="results-item">
+							<span class="brand-name">珠江</span>
+							<span class="ent-name">河合乐器制作所</span>
+						</li>							
+					</ul>
+					<ul class="letter-list">
+						<li v-for="(item,index) in letter" :key="index" >{{item}}</li>
 					</ul>
 					
 			</div>				
@@ -59,6 +74,7 @@
 export default {
   data () {
     return {
+      letter:['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'], 	
       motto: 'Hello World',
       userInfo: {}
     }
@@ -83,10 +99,6 @@ export default {
     }
   },
 
-  created () {
-  //	this._getDetail();
-    // 调用应用实例的方法获取全局数据
-  }
 }
 </script>
 
@@ -175,30 +187,32 @@ export default {
 	}
 
 	.search-results{
+		position: relative;
 		width: 100%;
 		box-sizing: border-box;
-		padding-right: 40px;
+		padding-right: 20px;
 		.results-content{
 			width: 100%;
 			height: auto;
 			border: 1px solid #eee;
 			box-sizing: border-box;
 			.results-item{
-				height: 30px;
-				line-height: 30px;
+				height: 36px;
+				line-height: 36px;
 				display: flex;
+				font-size: 14px;
 				box-sizing: border-box;
 				border-bottom: 1px solid #eee;
 				.brand-name{
 					flex: 1;
-					line-height: 30px;
+					line-height: 36px;
 					text-align: center;
 					box-sizing: border-box;
 					border-right:1px solid #eee;
 				}
 				.ent-name{
 					flex: 1;
-					line-height: 30px;
+					line-height: 36px;
 					text-align: center;
 					box-sizing: border-box;				
 				}
@@ -209,9 +223,19 @@ export default {
 		}
 	}
 	
-
-
-
-
+	.letter-list{
+		position: absolute;
+		top: 0;
+		right: 0;
+		height: auto;
+		li{
+			height: 20px;
+			line-height: 20px;
+			text-align: center;
+			font-size: 13px;
+			color: #666;
+		}
+	}
+		
 
 </style>
