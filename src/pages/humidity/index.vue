@@ -3,8 +3,12 @@
 
 　　<div class="container">
 
-　　<canvas canvas-id="clock"/>
-
+　　	<canvas canvas-id="clock"/>
+	<div class="humidty">
+		<p class="num">94<span class="iocn" >%</span></p>
+		<p class="status">超湿</p>
+	</div>
+	
 　　</div>
 
 	</div>
@@ -24,7 +28,7 @@ import {gradientColor} from '@/utils/index.js'
 		},
 
 		methods: {
-			  drawClock () {
+			  drawClock (index) {
 			    const ctx = wx.createCanvasContext('clock');
 			    var height = this.height;
 			    var width = this.width;
@@ -51,28 +55,78 @@ import {gradientColor} from '@/utils/index.js'
 			    // 画数字对应的点
 			    function drawdots() {
 			    	
-			      var gradient = new gradientColor('#6de0e3','#3e3ef3',64);
+			      var gradient = new gradientColor('#e3f6ff','#0157da',64);
 			      console.log(gradient.length);
-			      for (let i = 0; i < 60; i++) {
+
+
+//			    let i = 0;
+//			    let interval = setInterval(function(){
+//			    	
+//			    	if(i <= 50){
+//			    		clearInterval(interval);
+//			    	}else{
+//					      ctx.save();
+//					      ctx.beginPath();
+//					      // 确定偏移
+//					      var rad = 2 * Math.PI / 120 * i;
+//					      ctx.rotate(rad);
+//					      ctx.setLineWidth(2);
+//					      ctx.setStrokeStyle(gradient[i]);
+//					      if(i<=50){
+//					      	ctx.setStrokeStyle(gradient[i]);
+//
+//					      }else{
+//					      	ctx.setStrokeStyle('#eeeeee');
+//				      	   }
+//					      
+//					      ctx.moveTo(0, 10);
+//					      // 一开始的位置指向12点的方向，长度为3 * R / 4
+//					      if(i==50){
+//					      	ctx.lineTo((-3 * R / 2)+30,0);	
+//					      }else{
+//					      	ctx.lineTo((-3 * R / 2)+35,0);
+//					      }
+//					      ctx.stroke();
+//					      ctx.closePath();
+//					      ctx.restore();
+//			    	}
+//			    	i++
+//			    }, 40);
+
+			     
+			     
+			     for (let i = 0; i < 60; i++) {
 					      ctx.save();
 					      ctx.beginPath();
 					      // 确定偏移
 					      var rad = 2 * Math.PI / 120 * i;
 					      ctx.rotate(rad);
-					      ctx.setLineWidth(4);
+					      ctx.setLineWidth(2);
 					      ctx.setStrokeStyle(gradient[i]);
 					      if(i<=50){
 					      	ctx.setStrokeStyle(gradient[i]);
+
+					      	
 					      }else{
 					      	ctx.setStrokeStyle('#eeeeee');
-					      }
+				      		}
+					      
 					      ctx.moveTo(0, 10);
 					      // 一开始的位置指向12点的方向，长度为3 * R / 4
-					      ctx.lineTo((-3 * R / 2)+35,0);
+					      if(i==50){
+					      	ctx.lineTo((-3 * R / 2)+30,0);	
+					      }else{
+					      	ctx.lineTo((-3 * R / 2)+35,0);
+					      }
 					      ctx.stroke();
 					      ctx.closePath();
 					      ctx.restore();					    	
 			      }
+			      
+			      
+			      
+			      
+			      
 			      ctx.closePath();
 			    }
 			
@@ -80,7 +134,7 @@ import {gradientColor} from '@/utils/index.js'
 			    //画出中间白色的大圆
 			    function drawDot() {
 			      ctx.beginPath();
-			      ctx.arc(0, 0, 170, 0, 2 * Math.PI, false);
+			      ctx.arc(0, 0, (3 * R / 2)-50, 0, 2 * Math.PI, false);
 			      ctx.setFillStyle('#ffffff');
 			      ctx.fill();
 			      ctx.closePath();
@@ -88,35 +142,23 @@ import {gradientColor} from '@/utils/index.js'
 			    //画出中间那个灰色的圆
 			    function drawDot1() {
 			      ctx.beginPath();
-			      ctx.arc(0, 0, 140, 0, 2 * Math.PI, false);
+			      ctx.arc(0, 0, (3 * R / 2)-80, 0, 2 * Math.PI, false);
 			      const grd = ctx.createLinearGradient(0, 140, 0, -140)
 				  grd.addColorStop(0, '#f8f8f8')
 				  grd.addColorStop(1, '#fff')
 				  ctx.setFillStyle(grd)
-				  ctx.setShadow(0, 5, 20, '#bbb')
+				  ctx.setShadow(0, 5, 15, '#bbb')
 			      ctx.fill();
 			      ctx.closePath();
 			    }
 			    //画出中间白色的小圆
 			    function drawDot2() {
 			      ctx.beginPath();
-			      ctx.arc(0, 0, 130, 0, 2 * Math.PI, false);
+			      ctx.arc(0, 0, (3 * R / 2)-90, 0, 2 * Math.PI, false);
 				  ctx.setFillStyle('#ffffff');				  
 				  ctx.setShadow(0, 0, 0, '#fff')
 			      ctx.fill();
 			      ctx.closePath();
-			    }
-			    //画出文字
-			    function drawText() {
-			      ctx.beginPath();
-				  ctx.setFontSize(90);
-				  ctx.fillText('50',-45, 0);
-				  ctx.setFontSize(30);
-				  ctx.fillText('%', 65, 0);
-				  //ctx.setFillStyle('#6de0e3');
-//				  ctx.setShadow(0, 0, 0, '#6de0e3')
-//			      ctx.fill();
-//			      ctx.closePath();
 			    }
 
 			    function Clock() {
@@ -124,8 +166,7 @@ import {gradientColor} from '@/utils/index.js'
 			      drawdots();
 			      drawDot();
 			      drawDot1();
-			     // drawDot2();
-			      drawText();
+			      drawDot2();
 			      // 微信小程序要多个draw才会画出来，所以在最后画出
 			      ctx.draw();
 			    }
@@ -163,7 +204,7 @@ import {gradientColor} from '@/utils/index.js'
 			        that.width = res.windowWidth
 			        // console.log(that.width)   375
 			        that.height = res.windowHeight
-			        that.drawClock();
+			        that.drawClock(-1);
 			        // console.log(that.height)  625
 			        // 这里的单位是PX，实际的手机屏幕有一个Dpr，这里选择iphone，默认Dpr是2
 			      }
@@ -171,7 +212,17 @@ import {gradientColor} from '@/utils/index.js'
 			
 			   
 			    // 每40ms执行一次drawClock()，人眼看来就是流畅的画面
-			    //this.interval = setInterval(this.drawClock, 40);
+//			    let i = 0;
+//			    let interval = setInterval(function(){
+//			    	i++
+//			    	if(i==50){
+//			    		clearInterval(interval);
+//			    	}else{
+//			    		that.drawClock(i);
+//			    	}
+//			    	
+//			    }, 40);
+			    
 			  },
 			
 			
@@ -184,6 +235,7 @@ import {gradientColor} from '@/utils/index.js'
 <style lang="scss" scoped>
 
 .container {
+  position: relative;	
   height: 100vh;
   width: 100vw;
   padding: 0;
@@ -194,7 +246,33 @@ canvas {
   height: 100%;
   width: 100%;
 }
- 
 
+.humidty{
+	position: absolute;
+	height: 300px;
+	width: 100%;
+	top: 66px;
+	left: 0;
+	box-sizing: border-box;
+	padding-top: 100px;
+	background: none;
+	z-index: 100;
+	.num{
+		width: 100%;
+		text-align: center;
+		font-size: 88px;
+		color: #1E90FF;
+		.iocn{
+			font-size: 32px;
+		}
+	}
+	.status{
+		width: 100%;
+		text-align: center;
+		font-size: 14px;
+		color: #1E90FF;
+	}
+	
+}
 
 </style>
