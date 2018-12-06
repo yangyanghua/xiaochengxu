@@ -5,13 +5,13 @@
 
 　　	<canvas canvas-id="clock"/>
 	<div class="humidty">
-		<p class="num">94<span class="iocn" >%</span></p>
-		<p class="status">超湿</p>
-		<p class="start">0%</p>
-		<p class="min">50%</p>
-		<p class="end">100%</p>
+		<p class="num">24<span class="iocn" >℃</span></p>
+		<p class="status">偏低</p>
+		<p class="start">-20℃</p>
+		<p class="min">35℃</p>
+		<p class="end">50℃</p>
 		
-		<p class="ps-txt">理想保养湿度：40%-60%</p>
+		<p class="ps-txt">理想保养温度：20℃-25℃</p>
 		
 	</div>
 	
@@ -61,9 +61,9 @@ import {gradientColor} from '@/utils/index.js'
 			    // 画数字对应的点
 			    function drawdots() {
 			    	
-			      var gradient = new gradientColor('#e3f6ff','#0157da',64);
+			      var gradient = new gradientColor('#5ccaff','#e7e78f',64);
 
-			     for (let i = 0; i < 60; i++) {
+			     for (let i = 0; i <= 60; i++) {
 					      ctx.save();
 					      ctx.beginPath();
 					      // 确定偏移
@@ -222,7 +222,7 @@ canvas {
 		width: 100%;
 		text-align: center;
 		font-size: 88px;
-		color: #1E90FF;
+		color: #FC9F44;
 		.iocn{
 			font-size: 32px;
 		}
@@ -245,7 +245,7 @@ canvas {
 		font-size: 18px;
 		color: #333;
 		top: 63%;
-		left: 25px;
+		left: 10px;
 		
 	}
 	.min{

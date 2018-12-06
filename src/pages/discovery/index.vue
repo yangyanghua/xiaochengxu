@@ -3,13 +3,13 @@
 		<official-account  ></official-account>
 		<div class="top-bar">
 			<div class="top-iocn">
-				<image v-if="img" class="userImg" :src="img" />
+				<image  class="userImg" src="../../static/img/illustration2x.png" />
 			</div>
 
 			<div class="form-content">
 				<div class="form-item">
 					<div class="input-box">
-						<input class="seachInput" v-model="brand"  placeholder="钢琴品牌" />
+						<input class="seachInput" v-model="form.brandCN"  placeholder="钢琴品牌" />
 					</div>
 					<div class="btn-box">
 						<image class="seach-iocn" src="../../static/img/seach1.png" />
@@ -17,7 +17,7 @@
 				</div>
 				<div class="form-item">
 					<div class="input-box">
-						<input class="seachInput" v-model="pianoSn" placeholder="钢琴编号" />
+						<input class="seachInput" v-model="form.serialNo" placeholder="钢琴编号" />
 					</div>
 					<div class="btn-box" @tap="codeTest" >
 						<image class="seach-iocn" src="../../static/img/code.png" />
@@ -32,20 +32,21 @@
 
 			<!--<button class="submit-btn" hover-class="active" @tap="submitData" >开始查询</button>-->
 			<button class="submit-btn" v-if="!searchBtnShow"    open-type="getUserInfo" @getuserinfo="bindGetUserInfo">开始查询</button>
-			<button class="submit-btn" v-if="searchBtnShow" hover-class="active" @tap="submitData" >开始查询</button>
+			<button class="submit-btn" v-if="searchBtnShow" :loading="loading" :disabled="loading" hover-class="active" @tap="submitData" >开始查询</button>
 			
 			<div class="info-content" v-if="data.length > 0" >
 
 				<div class="title">
 					查询结果
 				</div>
+				
 				<ul class="info" v-for="(item,index) in data" :key="index" >
 					<li class="info-item">
 						<div class="lable-txt">
 							钢琴品牌：
 						</div>
 						<div class="value-txt">
-							{{item.brand}}
+							{{item.brandEN}}--{{item.brandCN}}
 						</div>
 					</li>
 
@@ -54,7 +55,7 @@
 							钢琴描述：
 						</div>
 						<div class="value-txt">
-							{{item.des}}
+							{{item.desc==null? '' : item.desc }}
 						</div>
 					</li>
 					<li class="info-item">
@@ -70,7 +71,7 @@
 							钢琴生产商：
 						</div>
 						<div class="value-txt">
-							{{item.factory}}
+							{{item.producer}}
 						</div>
 					</li>
 					<li class="info-item">
@@ -86,7 +87,7 @@
 							钢琴经销商商业登记号：
 						</div>
 						<div class="value-txt">
-							{{item.dealerSn}}
+							{{item.dealerNo}}
 						</div>
 					</li>
 				</ul>
@@ -102,15 +103,17 @@
 </template>
 
 <script>
-import {queryByBrand,queryBySn} from './srevice.js'	
+import {authenticity} from './srevice.js'	
 	export default {
 		data() {
 			return {
 				userInfo: {},
 				data:[],
-				img:'',
-				pianoSn:'',
-				brand:'',
+				loading:false,
+				form:{
+					brandCN:'',
+					serialNo:''
+				},
 				searchBtnShow:false,
 			}
 		},
@@ -122,18 +125,33 @@ import {queryByBrand,queryBySn} from './srevice.js'
 				 this.searchBtnShow = true;
 			},
 			submitData(){
-				if(this.pianoSn){
-					this._queryBySn({sn:this.pianoSn});	
-				}else{
-					this._queryByBrand({brand:this.brand});
-				}
+				if(!this.form.brandCN){
+					wx.showToast({
+						title: '请输入钢琴品牌',
+						icon: 'none',
+						duration: 2000
+					})
+					return false;
+				};
+				
+				if(!this.form.serialNo){
+					wx.showToast({
+						title: '请输入钢琴序列号',
+						icon: 'none',
+						duration: 2000
+					})
+					return false;
+				};				
+				this._authenticity(this.form);
 			},
 			
-			_queryBySn(opt){
-				
-				queryBySn(opt).then((res)=>{
+			_authenticity(opt){
+				this.loading = true;
+				authenticity(opt).then((res)=>{
+					this.loading = false;
 					this.data = [res];
 				}).catch((res)=>{
+					this.loading = false;
 					wx.showToast({
 						title: '网络错误',
 						icon: 'none',
@@ -143,20 +161,6 @@ import {queryByBrand,queryBySn} from './srevice.js'
 				
 			},
 			
-			_queryByBrand(opt){
-				
-				queryByBrand(opt).then((res)=>{
-					
-					this.data = res;
-					
-				}).catch((res)=>{
-					wx.showToast({
-						title: '网络错误',
-						icon: 'none',
-						duration: 2000
-					})					
-				})
-			},
 
 			
 			codeTest(){
@@ -213,21 +217,17 @@ import {queryByBrand,queryBySn} from './srevice.js'
 			position: absolute;
 			top: 10px;
 			left: 50%;
-			margin-left: -45px;
-			height: 90px;
-			width: 90px;
-			box-shadow: 0 2px 15px -7px #000;
-			background: #F8F8F8;
-			overflow: hidden;
-			border-radius: 50%;
+			margin-left: -65px;
+			height: 130px;
+			width: 130px;
 			.userImg{
-				height: 90px;
-				width: 90px;				
+				height: 130px;
+				width: 130px;				
 			}
 		}
 		.form-content {
 			position: absolute;
-			bottom: -85px;
+			bottom: -95px;
 			left: 50%;
 			margin-left: -47%;
 			width: 94%;
@@ -274,7 +274,7 @@ import {queryByBrand,queryBySn} from './srevice.js'
 	}
 	
 	.bot-content {
-		margin-top: 110px;
+		margin-top: 130px;
 		.submit-btn {
 			background: #58a1ff;
 			color: #fff;

@@ -4,7 +4,7 @@ const development = true;
 const production = false;
 const test = false;
 if(development) {
-	httpService = 'http://119.29.139.174:8080'; //测试
+	httpService = 'http://piano-weixin.oigo.cn'; //测试
 }
 
 const requstGet = function(url, data, header) {
@@ -33,7 +33,7 @@ function requst(url, method, data = {}, header = 'application/x-www-form-urlenco
 			method: method.toUpperCase(), // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
 			success: function(res) {
 				wx.hideNavigationBarLoading();
-					if(res.data.code == 200) {
+					if(res.data.code == 0) {
 						resove(res.data.data)
 					} else {
 						let err = {

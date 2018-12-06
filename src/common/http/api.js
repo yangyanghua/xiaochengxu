@@ -1,4 +1,18 @@
 
-export const queryBySn  ='/v1/piano/queryBySn'  ;//编号查钢琴
-export const queryByBrand  ='/v1/piano/queryByBrand'  ;//品牌查钢琴
+
+export const authenticity  ='/authenticity/query'  ;//查询钢琴
+
+
+
+//首页
+export const getIndexArticle  ='/index/article';
+export const getIndexCarousel  ='/index/carousel';
+export const getIndexRecommend  ='/index/recommend';
+
+//钢琴管家
+export const myPianoList  ='/myPiano/list';
+export const myPianoInfo  ='/myPiano/info';
+export const humidity  ='/myPiano/humidity';
+export const temperature  ='/myPiano/temperature';
+
 

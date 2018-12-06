@@ -11,9 +11,9 @@
 		<div class="wiper-banner">
 
 			<swiper :indicator-dots="indicatorDots" class="swiperContent" :autoplay="autoplay" :interval="interval" indicator-dots="true" previous-margin="15px" next-margin="15px" :duration="duration">
-				<block v-for="(item,index) in imgUrls" :key="index">
+				<block v-for="(item,index) in banner" :key="index">
 					<swiper-item class="image-box">
-						<image :src="item" class="slide-image" />
+						<image :src="item.imageUrl" class="slide-image" />
 					</swiper-item>
 				</block>
 			</swiper>
@@ -22,19 +22,19 @@
 
 		<div class="nav">
 			<ul class="nav-list">
-				<li class="navitem">
+				<li class="navitem" @tap="linkTo('discovery')" >
 					<img class="nav-image" src="../../static/img/icon_query2x.png" />
 					<p class="nav-txt">真伪查询</p>
 				</li>
-				<li class="navitem">
+				<li class="navitem" @tap="linkTo('pianoRegister')" >
 					<img class="nav-image" src="../../static/img/icon_register2x.png" />
 					<p class="nav-txt">钢琴注册</p>
 				</li>
-				<li class="navitem">
+				<li class="navitem" @tap="linkTo('serRequest')" >
 					<img class="nav-image" src="../../static/img/icon_service2x.png" />
 					<p class="nav-txt">我要服务</p>
 				</li>
-				<li class="navitem">
+				<li class="navitem" @tap="linkTo('steward')" >
 					<img class="nav-image" src="../../static/img/icon_housekeepe2x.png" />
 					<p class="nav-txt">智能管家</p>
 				</li>
@@ -48,18 +48,21 @@
 				<p class="title-txt">每日推荐</p>
 			</div>
 
-			<div class="product">
+			<div class="product" v-for="(item,index) in recommend" :key="index" >
 				<div class="image-box">
-					<img class="pro-image" src="../../static/img/gangqin1.png" />
+					<img class="pro-image" :src="item.imageUrl" />
 				</div>
 				<div class="pro-info">
-					<p class="name"><span class="brand">KAWAI</span>-UPRIGHI &nbsp;&nbsp;X1系列全新立式钢琴，原装进口，家用教学级考试级</p>
+					<p class="name"><span class="brand">{{item.brandEN}}-{{item.brandCN}}</span>-{{item.model}} &nbsp;&nbsp;{{item.series+'系列'}}全新{{item.desc}}</p>
 					<p class="sku-list">
-						<span class="sku-item">立式</span><span class="sku-item">黑色</span>
+						<span class="sku-item">{{item.spec}}</span><span class="sku-item">{{item.color}}</span>
 					</p>
-					<p class="price">RMB&nbsp;17666.00</p>
+					<p class="price">RMB&nbsp;{{item.priceCN}}</p>
 				</div>
 			</div>
+			
+			
+			
 		</div>
 
 		<div class="line"></div>
@@ -72,10 +75,7 @@
 			</div>
 
 			<ul class="news-list">
-				<li class="new-item">如何挑选钢琴，这样买琴，节省50%的预算！</li>
-				<li class="new-item">半年后才有时间去报班，现在想自己先练一线应该没有问题的吧？</li>
-				<li class="new-item">如何挑选钢琴，这样买琴，节省50%的预算！</li>
-				<li class="new-item">半年后才有时间去报班，现在想自己先练一线应该没有问题的吧？</li>
+				<li class="new-item" v-for="(item,index) in article" :key="index" >{{item.articleTitle}}</li>
 			</ul>
 
 		</div>
@@ -85,15 +85,14 @@
 </template>
 
 <script>
-	import { getDetail } from './srevice.js';
+
+	import { getIndexArticle,getIndexCarousel,getIndexRecommend } from './srevice.js';
 	export default {
 		data() {
 			return {
-				imgUrls: [
-					'../../static/img/gangqin.png',
-					'../../static/img/gangqin.png',
-					'../../static/img/gangqin.png'
-				],
+				banner:[],
+				recommend:[],
+				article:[],
 				indicatorDots: false,
 				autoplay: 2000,
 				interval: 5000,
@@ -103,33 +102,66 @@
 		},
 
 		methods: {
-
-			getPhoneNumber(e) {
-				console.log(e.detail.errMsg)
-				console.log(e.detail.iv)
-				console.log(e.detail.encryptedData)
+			linkTo(path){
+				wx.navigateTo({
+						url: '../'+path+'/main'
+					})
+				
 			},
-
-			_getDetail() {
-
-				getDetail({
-					id: '64'
-				}).then((res) => {
-					console.log(res);
-
-				}).catch((res) => {
-					console.log(res);
+			_getIndexCarousel(){
+				
+				getIndexCarousel().then((res)=>{
+					this.banner = res;
+					
+				}).catch((res)=>{
+					wx.showToast({
+						title: res.msg,
+						icon: 'none',
+						duration: 2000
+					})						
 				})
+				
 			},
-
-			clickHandle(msg, ev) {
-				console.log('clickHandle:', msg, ev)
+			_getIndexRecommend(){
+				
+				getIndexRecommend().then((res)=>{
+					this.recommend = res;
+				}).catch((res)=>{
+					
+					wx.showToast({
+						title: res.msg,
+						icon: 'none',
+						duration: 2000
+					})					
+				})
+				
+			},
+			_getIndexArticle(){
+				
+				getIndexArticle().then((res)=>{
+					
+					this.article = res;
+					
+				}).catch((res)=>{
+					
+					wx.showToast({
+						title: res.msg,
+						icon: 'none',
+						duration: 2000
+					})						
+					
+				})
+				
 			}
+		
+		},
+		onReady() {
+			
+			this._getIndexCarousel();
+			this._getIndexRecommend();
+			this._getIndexArticle();
 		},
 
-		created() {
-			//	this._getDetail();
-		}
 	}
 </script>
 
