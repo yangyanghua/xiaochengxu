@@ -11,26 +11,14 @@
 		
 		<div class="data-list">
 
-			<ul class="info-list">
-				<li class="info-item" >KAWAI</li>
-				<li class="info-item" >KU 123</li>
-				<li class="info-item" >1234567</li>
-				<li class="info-item address" >广东广州x街x楼x室</li>
+			<ul class="info-list" v-for="(item,index) in data" :key="index" @tap="select(item.pianoId)" v-bind:class="{'active':item.pianoId==pid}" >
+				<li class="info-item" >{{item.brandCN}}</li>
+				<li class="info-item" >{{item.model}}</li>
+				<li class="info-item" >{{item.serialNo}}</li>
+				<li class="info-item address" >{{item.address}}</li>
 			</ul>
 
-			<ul class="info-list">
-				<li class="info-item" >KAWAI</li>
-				<li class="info-item" >KU 123</li>
-				<li class="info-item" >1234567</li>
-				<li class="info-item address" >广东广州x街x楼x室</li>
-			</ul>
 
-			<ul class="info-list">
-				<li class="info-item" >KAWAI</li>
-				<li class="info-item" >KU 123</li>
-				<li class="info-item" >1234567</li>
-				<li class="info-item address" >广东广州x街x楼x室</li>
-			</ul>
 
 		</div>
 
@@ -50,22 +38,65 @@
 </template>
 
 <script>
-	import { getDetail } from './srevice.js';
+	import { myPianoList } from './srevice.js';
 
 	export default {
 		data() {
 			return {
-
+				data:[],
+				pid:'',
 			}
 		},
 
 		methods: {
-
+			select(pid){
+				
+						this.pid = pid;
+						wx.setStorage({
+							key: 'pid',
+							data: pid,	
+							success: function(res) {
+								
+								wx.navigateBack({
+								    delta: 1
+								})							
+								
+							},
+							fail:function(){
+							}
+						})				
+				
+			},
+			_myPianoList(){
+				myPianoList().then((res)=>{
+					
+					this.data = res;
+					
+				}).catch((res)=>{
+					wx.showToast({
+						title: res.msg,
+						icon: 'none',
+						duration: 2000
+					})						
+				})
+				
+			}
 		
 		},
 
 		onReady() {
-
+			let vm = this;
+				wx.getStorage({
+					key: 'pid',
+					success: function(res) {
+						vm.pid = res.data;
+					},
+					fail:function(){
+						
+					}
+				})				
+			this._myPianoList();
+			
 		}
 	}
 </script>
@@ -107,13 +138,26 @@
 		height: auto;
 		
 		.info-list{
+			position: relative;
 			height: 60px;
 			width: 100%;
 			background: #FFFFFF;
 			box-shadow: 0 2px 15px 0 rgba(208,208,208,0.50);
 			border-radius: 4px;
+			overflow: hidden;
 			margin-top: 10px;
 			display: flex;
+			&.active::after{
+				position: absolute;
+				content: '';
+				height: 30px;
+				width: 30px;
+				background: #519FFF;
+				top: -15px;
+				left: -15px;
+				transform: rotateZ(45deg);
+			}
+			
 			.info-item{
 				flex: 1;
 				position: relative;

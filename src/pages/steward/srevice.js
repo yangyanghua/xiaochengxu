@@ -9,11 +9,5 @@ export const myPianoInfo = (params = {}) => {
 	return requstGet(api.myPianoInfo, params);
 }
 
-export const humidity = (params = {}) => {
-	return requstGet(api.humidity, params);
-}
 
-export const temperature = (params = {}) => {
-	return requstGet(api.temperature, params);
-}
 

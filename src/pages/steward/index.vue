@@ -5,16 +5,16 @@
 
 			<div class="piano-info">
 				<div class="piano-img-box">
-					<image class="pianoImg" :src="{{piano.imageUrl}}" />
+					<image class="pianoImg" :src="piano.imageUrl" />
 				</div>
 				<div class="piano-txt">
 					<p class="model">型号：{{piano.model}}</p>
 					<p class="number">序列号：{{piano.serialNo}}</p>
 					<div class="status">保养等级： <span class="statusMark">{{piano.levelName}}</span>
-						<image class="statusImg" src="../../static/img/icon_v32x.png" /> </div>
+					<image v-if="piano.levelName=='中'" class="statusImg" src="../../static/img/icon_v32x.png" /> </div>
 				</div>
 				<div class="chioosPiano">
-					<div class="chioosBtn">
+					<div class="chioosBtn" @tap="linkTo('pianoSelect')" >
 						<image class="chioosBtn-img" src="../../static/img/icon_choose2x.png" />
 					</div>
 				</div>
@@ -23,34 +23,31 @@
 
 		</div>
 
-	
-
-
 		<div class="bot-content">
 			
 			<div class="environment">
 
-				<div class="env-item tem">
+				<div class="env-item tem" @tap="linkTo('temperature')" >
 					<div class="env-title">
 						<image class="env-img" src="../../static/img/icon_temperature2x.png" />
 						温度
 					</div>
 					<div class="value">
-						25<span class="iocn-txt" >℃</span>
+						{{piano.temperature}}<span class="iocn-txt" >℃</span>
 					</div>
-					<p class="statusMark">正常</p>
+					<p class="statusMark">{{piano.temperatureDesc}}</p>
 					
 				</div>
 
-				<div class="env-item hum">
+				<div class="env-item hum" @tap="linkTo('humidity')" >
 					<div class="env-title">
 						<image class="env-img" src="../../static/img/icon_humidity2x.png" />
 						湿度		
 					</div>
 					<div class="value">
-						25<span class="iocn-txt" >%</span>
+						{{piano.humidity}}<span class="iocn-txt" >%</span>
 					</div>
-					<p class="statusMark">超湿</p>
+					<p class="statusMark">{{piano.humidityDesc}}</p>
 				</div>
 
 			</div>
@@ -59,7 +56,7 @@
 			<div class="info-content">
 
 				<div class="title">
-					上次维护：<span class="sub-title">2017年11月17日</span>
+					上次维护：<span class="sub-title">{{piano.maintainDate}}</span>
 				</div>
 				
 				<div class="btn-box">
@@ -67,7 +64,7 @@
 						<div class="submit-btn" >智能分析我的需求</div>
 					</div>
 					<div class="btn">
-						<div class="plain-btn"  >提出请求</div>
+						<div class="plain-btn" @tap="linkTo('serRequest')"  >提出请求</div>
 					</div>
 					
 				</div>
@@ -113,7 +110,7 @@
 </template>
 
 <script>
-	import { myPianoList, myPianoInfo,humidity,temperature } from './srevice.js'
+	import { myPianoList, myPianoInfo } from './srevice.js'
 	export default {
 		data() {
 			return {
@@ -144,32 +141,8 @@
 				})
 				
 			},
-			_humidity(id){
-				
-				humidity({id:id}).then((res)=>{
-					this.hInfo = res;
-				}).catch((res)=>{
-					wx.showToast({
-						title: res.msg,
-						icon: 'none',
-						duration: 2000
-					})						
-				})
-				
-			},
-			_temperature(id){
-				
-				temperature({id:id}).then((res)=>{
-					this.tInfo = res;
-				}).catch((res)=>{
-					wx.showToast({
-						title: res.msg,
-						icon: 'none',
-						duration: 2000
-					})					
-				})
-				
-			},
+
+
 			_myPianoList(){
 				myPianoList().then((res)=>{
 					if(res.length==0){
@@ -190,9 +163,15 @@
 					}else{
 						let pid = res[0].pianoId;
 						this._myPianoInfo(pid);
-						this._myPianoInfo(pid);
-						this._myPianoInfo(pid);
-						
+						wx.setStorage({
+							key: 'pid',
+							data: pid,	
+							success: function(res) {
+
+							},
+							fail:function(){
+							}
+						})							
 					}
 					
 				}).catch((res)=>{
@@ -213,7 +192,7 @@
 				wx.getStorage({
 					key: 'pid',
 					success: function(res) {
-						let pid = res;
+						let pid = res.data;
 						vm._myPianoInfo(pid);
 					},
 					fail:function(){

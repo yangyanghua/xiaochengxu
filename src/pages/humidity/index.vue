@@ -4,16 +4,6 @@
 　　<div class="container">
 
 　　	<canvas canvas-id="clock"/>
-	<div class="humidty">
-		<p class="num">94<span class="iocn" >%</span></p>
-		<p class="status">超湿</p>
-		<p class="start">0%</p>
-		<p class="min">50%</p>
-		<p class="end">100%</p>
-		
-		<p class="ps-txt">理想保养湿度：40%-60%</p>
-		
-	</div>
 	
 　　</div>
 
@@ -22,19 +12,51 @@
 </template>
 
 <script>
-import {queryByBrand,queryBySn} from './srevice.js'	
+import {humidity} from './srevice.js'	
 import {gradientColor} from '@/utils/index.js'
 
 	export default {
 		data() {
 			return {
+				h:0,
 			    width: 340,
-			    height: 340
+			    height: 340,
+			    hInfo:{},
 			}
 		},
 
 		methods: {
-			  drawClock (index) {
+			_humidity(id){
+				
+				 var that = this;
+				humidity({id:id}).then((res)=>{
+					this.hInfo = res;
+			   		let x = parseInt((res.code*0.6));
+				    let i = 0,b = 0;
+				    let interval = setInterval(function(){
+				    	i++;
+				    	b += 1;					    	
+				    	if(i > x){
+				    		b = res.code; 
+				    		that.drawClock(i-1,String(b),res.name);
+				    		clearInterval(interval);	    		
+				    	}else{
+				    		that.drawClock(i,String(b),res.name);
+				    	}
+				    	
+				    }, 40);						    
+				    			  
+					
+				}).catch((res)=>{
+					wx.showToast({
+						title: res.msg,
+						icon: 'none',
+						duration: 2000
+					})						
+				})
+				
+			},			
+			  drawClock (index,val,name) {
 			    const ctx = wx.createCanvasContext('clock');
 			    var height = this.height;
 			    var width = this.width;
@@ -61,7 +83,7 @@ import {gradientColor} from '@/utils/index.js'
 			    // 画数字对应的点
 			    function drawdots() {
 			    	
-			      var gradient = new gradientColor('#e3f6ff','#0157da',64);
+			      var gradient = new gradientColor('#e3f6ff','#0157da',60);
 
 			     for (let i = 0; i < 60; i++) {
 					      ctx.save();
@@ -122,12 +144,46 @@ import {gradientColor} from '@/utils/index.js'
 			      ctx.closePath();
 			    }
 
+			    function drawTxt() {
+			    	ctx.beginPath();
+					ctx.setFillStyle('#519FFF');
+					ctx.setFontSize(R/2);
+					ctx.fillText(val, -R/2*(val.length/3), 0);
+					ctx.setFontSize(R/4);
+					
+					ctx.fillText('%', R/2*(val.length/4), 0);		
+				    ctx.setFillStyle('#519FFF');
+					ctx.setFontSize(R/8);
+					
+					ctx.fillText(name, -R/8, R/3);
+				    ctx.setFillStyle('#333333');
+					ctx.setFontSize(R/8);
+					ctx.fillText('理想保养温度：40%-60%', -R*3/4, R*3/2);
+
+				    ctx.setFillStyle('#333333');
+					ctx.setFontSize(R/8);
+					ctx.fillText('50%', -R/8, -R*4/3);
+
+				    ctx.setFillStyle('#333333');
+					ctx.setFontSize(R/8);
+					ctx.fillText('0%', -R*4/3, R/4);
+
+				    ctx.setFillStyle('#333333');
+					ctx.setFontSize(R/8);
+					ctx.fillText('100%', R, R/4);
+
+				    ctx.fill();
+				    ctx.closePath();					
+					
+			    }
+
 			    function Clock() {
 			      // 依次执行各个方法
 			      drawdots();
 			      drawDot();
 			      drawDot1();
 			      drawDot2();
+			      drawTxt();
 			      // 微信小程序要多个draw才会画出来，所以在最后画出
 			      ctx.draw();
 			    }
@@ -142,47 +198,32 @@ import {gradientColor} from '@/utils/index.js'
 			    wx.getSystemInfo({
 			      //获取系统信息成功，将系统窗口的宽高赋给页面的宽高  
 			      success: function (res) {
-			      	console.log(res);
 			        that.width = res.windowWidth
 			        // console.log(that.width)   375
 			        that.height = res.windowHeight
-			        
+			         that.drawClock(-1,'00','正常');
 			        // console.log(that.height)  625
 			        // 这里的单位是PX，实际的手机屏幕有一个Dpr，这里选择iphone，默认Dpr是2
 			      }
 			    })
 			  },
+		onShow() {
+			let vm = this;
+				wx.getStorage({
+					key: 'pid',
+					success: function(res) {
+						let pid = res.data;
+						vm._humidity(pid);
+					},
+					fail:function(){
+						
+					}
+				})			
 			
+		},				
 		onReady () {
 			
-			    var that = this
-			    //获取系统信息  
-			    
-			    wx.getSystemInfo({
-			      //获取系统信息成功，将系统窗口的宽高赋给页面的宽高  
-			      success: function (res) {
-			      	console.log(res);
-			        that.width = res.windowWidth
-			        // console.log(that.width)   375
-			        that.height = res.windowHeight
-			        that.drawClock(-1);
-			        // console.log(that.height)  625
-			        // 这里的单位是PX，实际的手机屏幕有一个Dpr，这里选择iphone，默认Dpr是2
-			      }
-			    })			
-			
-			   
-			    // 每40ms执行一次drawClock()，人眼看来就是流畅的画面
-			    let i = 0;
-			    let interval = setInterval(function(){
-			    	i++
-			    	if(i==50){
-			    		clearInterval(interval);
-			    	}else{
-			    		that.drawClock(i);
-			    	}
-			    	
-			    }, 40);
+
 			    
 			  },
 			
@@ -208,61 +249,6 @@ canvas {
   width: 100%;
 }
 
-.humidty{
-	position: absolute;
-	height: 300px;
-	width: 100%;
-	top: 66px;
-	left: 0;
-	box-sizing: border-box;
-	padding-top: 100px;
-	background: none;
-	z-index: 100;
-	.num{
-		width: 100%;
-		text-align: center;
-		font-size: 88px;
-		color: #1E90FF;
-		.iocn{
-			font-size: 32px;
-		}
-	}
-	.status{
-		width: 100%;
-		text-align: center;
-		font-size: 14px;
-		color: #1E90FF;
-	}
-	.ps-txt{
-		margin-top: 35%;
-		font-size: 16px;
-		color: #333;
-		text-align: center;		
-	}
-	
-	.start{
-		position: absolute;
-		font-size: 18px;
-		color: #333;
-		top: 63%;
-		left: 25px;
-		
-	}
-	.min{
-		position: absolute;
-		font-size: 18px;
-		color: #333;
-		left: 50%;
-		margin-left: -18px;
-		top: -5%;		
-	}
-	.end{
-		position: absolute;
-		font-size: 18px;
-		color: #333;
-		top: 63%;
-		right: 10px;			
-	}
-}
+
 
 </style>
