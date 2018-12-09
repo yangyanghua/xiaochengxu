@@ -17,7 +17,7 @@ export const temperature  ='/myPiano/temperature';
 export const guessServer  ='/maintain/guess';
 export const getServerInfo  ='/maintain/info';
 export const getServerList  ='/maintain/list';
-
+export const submitServer  ='/maintain/submit';
 
 
 

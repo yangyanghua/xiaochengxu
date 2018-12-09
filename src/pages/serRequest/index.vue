@@ -1,157 +1,271 @@
 <template>
-	<div class="main-content">
+	<section class="main">
 
-		<div class="top-half">
-			<div class="btn">
-				猜一猜我的需求
-			</div>
+		<div class="main-content" v-if="!success">
+
+			<div class="top-half">
+				<div class="btn" @click="guessMyNeed">
+					猜一猜我的需求
+				</div>
 
 				<div class="options-content">
 					<ul class="opt-list">
-						<li class="opt-item" >
-							<div class="check-box"></div>
-							调律
-						</li>
-						<li class="opt-item" >
-							<div class="check-box"></div>
-							整音
-						</li>
-						<li class="opt-item" >
-							<div class="check-box"></div>
-							检查
-						</li>
-						<li class="opt-item" >
-							<div class="check-box"></div>
-							清洁
-						</li>
-						<li class="opt-item" >
-							<div class="check-box"></div>
-							调整
-						</li>
-						<li class="opt-item" >
-							<div class="check-box"></div>
-							搬运
-						</li>	
-						<li class="opt-item" >
-							<div class="check-box"></div>
-							维修
-						</li>						
-						<li class="opt-item" >
-							<div class="check-box"></div>
-							其他
+						<li class="opt-item" v-for="(item,index) in options" :key="index" @click="checkItem(item.code,index)">
+							<div class="check-box" v-bind:class="{'active':item.checked}"></div>
+							{{item.name}}
 						</li>
 					</ul>
 				</div>
-		</div>
-	
-	<div class="bot-half">
-		<div class="title">
-			最爱时段
-		</div>
-		
-		<div class="time-box" @tap="openDate" >
-			<div class="tiem-val">2018/12/06</div>
-			<div class="ampm">上午
-				<image class="down-img" src="../../static/img/icon_triangle_down2x.png" />
-				
 			</div>
-		</div>
-		
-		
-	</div>
-		<div class="dateSelectBox" v-bind:class="{'show':dateSelectShow}">
-			<div class="dateSelect">
-				<div class="btnBox">
-					<span class="closeBtn datebtn" @tap="seleDateColse">取消</span>
-					<p class="nowdate">日期选择</p>
-					<span class="selectBtn datebtn" @tap="confirmSele">确定</span>
+
+			<div class="bot-half">
+				<div class="title">
+					最爱时段
 				</div>
-				<picker-view indicator-style="height: 50px;" style="width: 100%; height: 300px; text-align: center; " :value="value" @change="bindChange">
 
-					<picker-view-column>
-						<view v-for="(item,index) in years" :key="index" style="line-height: 50px">{{item}}年</view>
-					</picker-view-column>
-					<picker-view-column>
-						<view v-for="(item,days) in months" :key="index" style="line-height: 50px">{{item}}月</view>
-					</picker-view-column>
-					
-					<picker-view-column>
-						<view v-for="(item,index) in days" :key="index" style="line-height: 50px">{{item}}日</view>
-					</picker-view-column>				
-					<picker-view-column>
-						<view v-for="(item,index) in ampm" :key="index" style="line-height: 50px">{{item}}</view>
-					</picker-view-column>
-				</picker-view>
+				<div class="time-box" @tap="openDate">
+					<div class="tiem-val">{{showDate}}</div>
+					<div class="ampm">{{ampm[formData.timeType]}}
+						<image class="down-img" src="../../static/img/icon_triangle_down2x.png" />
+
+					</div>
+				</div>
+
+				<button class="submit-btn" :loading="loading" :disabled="loading" hover-class="active" @tap="submitData">提出请求</button>
+
 			</div>
+			<div class="dateSelectBox" v-bind:class="{'show':dateSelectShow}">
+				<div class="dateSelect">
+					<div class="btnBox">
+						<span class="closeBtn datebtn" @tap="seleDateColse">取消</span>
+						<p class="nowdate">日期选择</p>
+						<span class="selectBtn datebtn" @tap="confirmSele">确定</span>
+					</div>
+					<picker-view indicator-style="height: 50px;" style="width: 100%; height: 300px; text-align: center; " :value="value" @change="bindChange">
+
+						<picker-view-column>
+							<view v-for="(item,index) in years" :key="index" style="line-height: 50px">{{item}}年</view>
+						</picker-view-column>
+						<picker-view-column>
+							<view v-for="(item,days) in months" :key="index" style="line-height: 50px">{{item}}月</view>
+						</picker-view-column>
+
+						<picker-view-column>
+							<view v-for="(item,index) in days" :key="index" style="line-height: 50px">{{item}}日</view>
+						</picker-view-column>
+						<picker-view-column>
+							<view v-for="(item,index) in ampm" :key="index" style="line-height: 50px">{{item}}</view>
+						</picker-view-column>
+					</picker-view>
+				</div>
+			</div>
+
+		</div>
+		<div class="main-content" v-if="success">
+
+			<div class="dialog-box">
+				<image class="header-img" src="../../static/img/pic_heart2x.png" />
+				<p class="success-txt">我们已经收到您递交的资料，努力处理当中完成后我们会发送通知给您,感谢您对家中音乐大个子的照顾。</p>
+				<div class="btn-box">
+					<button class="submit-btn" hover-class="active" @tap="handelBack">确认</button>
+				</div>
+			</div>
+
 		</div>
 
-
-	
-
-	</div>
+	</section>
 
 </template>
 
 <script>
-	import { getDetail } from './srevice.js';
+	import { guessServer, submitServer } from './srevice.js';
 	const date = new Date()
 	const hours = []
 	const mins = []
-	let y =  date.getFullYear()
-	let m = date.getMonth()+1;
+	let y = date.getFullYear()
+	let m = date.getMonth() + 1;
 	let d = date.getDate();
 	let h = date.getHours();
 	let min = date.getMinutes();
-	let value = [0, m, d-1, 1];
+	let value = [0, m, d - 1, 1];
 	let years = [];
 	let days = [];
 	let months = [];
-	for(let i = y; i < y+3 ; i++ ){
-		years.push(i);		
+	let showDate = y + '/' + m + '/' + d;
+	for(let i = y; i < y + 3; i++) {
+		years.push(i);
 	};
 
-	for(let i = 1; i <= 31 ; i++ ){
+	for(let i = 1; i <= 31; i++) {
 		let num = i;
 		if(num < 10) {
 			num = '0' + i;
-		};		
+		};
 		days.push(num);
 	};
-	
-	for(let i = 1; i <= 12 ; i++ ){
+
+	for(let i = 1; i <= 12; i++) {
 		let num = i;
 		if(num < 10) {
 			num = '0' + i;
-		};		
+		};
 		months.push(num);
-	};	
-	
+	};
+
 	export default {
 		data() {
 			return {
-				dateSelectShow:false,
-				years:years,
-				months:months,
-				days:days,
-				value:value,
-				ampm:['上午','下午']
+				success: false,
+				loading: false,
+				dateSelectShow: false,
+				years: years,
+				months: months,
+				showDate: showDate,
+				days: days,
+				value: value,
+				ampm: ['上午', '下午'],
+				formData: {
+					date: '',
+					timeType: 1,
+					items: []
+				},
+				options: [{
+						code: 0,
+						name: '调律',
+						checked: false
+					},
+					{
+						code: 1,
+						name: '检查',
+						checked: false
+					},
+					{
+						code: 2,
+						name: '调整',
+						checked: false
+					},
+					{
+						code: 3,
+						name: '维修',
+						checked: false
+					},
+					{
+						code: 4,
+						name: '整音',
+						checked: false
+					},
+					{
+						code: 5,
+						name: '清洁',
+						checked: false
+					},
+					{
+						code: 6,
+						name: '搬运',
+						checked: false
+					},
+					{
+						code: 99,
+						name: '其他',
+						checked: false
+					},
+				]
+
 			}
 		},
 
 		methods: {
-			openDate(){
+
+			handelBack() {
+				wx.navigateBack({
+					delta: 1
+				})
+			},
+			submitData() {
+				if(this.formData.items.length == 0) {
+					wx.showToast({
+						title: '请选择服务项目',
+						icon: 'none',
+						duration: 2000
+					});
+
+					return false;
+
+				};
+				let obj  = Object.assign({},this.formData);
+				obj.items = obj.items.join(',');
+				this._submitServer(obj);
+				
+			},
+			checkItem(code, index) {
+				let idx = this.formData.items.indexOf(code);
+				if(idx != -1) {
+					this.formData.items.splice(idx, 1);
+					this.options[index].checked = false;
+				} else {
+					this.formData.items.push(code);
+					this.options[index].checked = true;
+				};
+
+			},
+			guessMyNeed() {
+				let vm = this;
+				wx.showLoading({
+					title: '需求分析中...',
+				})
+				guessServer().then((res) => {
+
+					wx.hideLoading();
+					this.formData.items = res;
+					this.options.forEach((item) => {
+						let idx = res.indexOf(item.code);
+						if(idx != -1) {
+							item.checked = true;
+						}
+					})
+				}).catch((res) => {
+					wx.showToast({
+						title: res.msg,
+						icon: 'none',
+						duration: 2000
+					})
+				})
+
+			},
+			openDate() {
 				this.dateSelectShow = true;
 			},
-			bindChange(){
-				
+			bindChange(res) {
+
+				this.value = res.mp.detail.value;
 			},
-			seleDateColse(){
+			seleDateColse() {
 				this.dateSelectShow = false;
 			},
-			confirmSele(){
-				
+
+			confirmSele() {
+				console.log(this.value);
+				this.formData.date = this.years[this.value[0]] + '-' + this.months[this.value[1]] + '-' + this.days[this.value[2]];
+				this.showDate = this.years[this.value[0]] + '/' + this.months[this.value[1]] + '/' + this.days[this.value[2]];
+				this.formData.timeType = this.value[3];
+				this.dateSelectShow = false;
+			},
+			_submitServer(opt) {
+
+				submitServer(opt).then((res) => {
+					this.success  = true;
+				}).catch((res) => {
+
+					wx.showToast({
+						title: res.msg,
+						icon: 'none',
+						duration: 2000
+					})
+
+				})
+
 			}
-		
+
 		},
 
 		onReady() {
@@ -165,16 +279,44 @@
 		background: #fff;
 		height: 100vh;
 		overflow: hidden;
+		border-top:1px solid #fff;
 		box-sizing: border-box;
 	}
-	.top-half{
+	
+	.dialog-box {
+		width: 90%;
+		height: 330px;
+		background: #FFFFFF;
+		box-shadow: 0 2px 15px 0 rgba(208, 208, 208, 0.50);
+		border-radius: 10px;
+		margin: auto;
+		margin-top: 30px;
+		overflow: hidden;
+		.header-img {
+			width: 100%;
+			height: 90px;
+		}
+		.success-txt {
+				font-size: 14px;
+				padding: 10px 40px;
+				line-height: 32px;
+				color: #000;
+				text-align: left;
+			}		
+		.submit-btn {
+			margin-top: 20px;
+			width: 200px;
+		}
+	}
+	
+	.top-half {
 		padding-top: 20px;
 		width: 100%;
 		height: 220px;
 		background: #fff;
-		
 	}
-	.btn{
+	
+	.btn {
 		height: 40px;
 		width: 60%;
 		line-height: 40px;
@@ -183,65 +325,68 @@
 		border: 1px solid #eee;
 		color: #15B1FF;
 		margin: auto;
-		border-radius:100px;
-		
+		border-radius: 100px;
 	}
-		.options-content{
+	
+	.options-content {
+		width: 100%;
+		.opt-list {
 			width: 100%;
-			.opt-list{
-				width: 100%;
-				margin-top: 15px;
-				height: auto;
-				.opt-item{
-					position: relative;
-					display: inline-block;
-					width: 50%;
-					box-sizing: border-box;
-					height: 36px;
-					line-height: 36px;
-					font-size: 14px;
-					color: #333;
-					text-align: center;
-				}
-				.check-box{
-					position: absolute;
-					height: 16px;
-					width: 16px;
-					border: 1px solid #eee;
-					border-radius:4px;
-					top: 50%;
-					margin-top: -8px;
-					left: 28%;
-					background: #fff;
+			margin-top: 15px;
+			height: auto;
+			.opt-item {
+				position: relative;
+				display: inline-block;
+				width: 50%;
+				box-sizing: border-box;
+				height: 36px;
+				line-height: 36px;
+				font-size: 14px;
+				color: #333;
+				text-align: center;
+			}
+			.check-box {
+				position: absolute;
+				height: 16px;
+				width: 16px;
+				border: 1px solid #eee;
+				border-radius: 4px;
+				top: 50%;
+				margin-top: -8px;
+				left: 28%;
+				background: #fff;
+				&.active {
+					background: #519FFF;
+					border-color: #519FFF;
 				}
 			}
-		}	
-	.bot-half{
+		}
+	}
+	
+	.bot-half {
 		width: 100%;
 		height: auto;
-		border-top:10px solid #f8f8f8 ;
+		border-top: 10px solid #f8f8f8;
 		box-sizing: border-box;
-		padding:0 10px;
-		
-		.time-box{
-			
+		padding: 0 10px;
+		.time-box {
 			width: 100%;
 			height: 60px;
-			margin-top: 5px;			
+			margin-top: 5px;
 			background: #FFFFFF;
-			box-shadow: 0 2px 15px 0 rgba(208,208,208,0.50);
+			box-shadow: 0 2px 15px 0 rgba(208, 208, 208, 0.50);
 			border-radius: 10px;
 			display: flex;
-			.tiem-val{
+			.tiem-val {
 				flex: 3;
 				position: relative;
 				line-height: 60px;
 				text-align: center;
 				font-size: 14px;
 				color: #333;
-				font-weight: 700;		
+				font-weight: 700;
 			}
-			.tiem-val::after{
+			.tiem-val::after {
 				position: absolute;
 				content: '';
 				width: 1px;
@@ -251,13 +396,13 @@
 				background: #eee;
 				right: 0;
 			}
-			.ampm{
+			.ampm {
 				flex: 2;
 				position: relative;
 				line-height: 60px;
 				text-align: center;
 				font-size: 14px;
-				.down-img{
+				.down-img {
 					position: absolute;
 					height: 9px;
 					width: 10px;
@@ -265,32 +410,30 @@
 					margin-top: -3px;
 					right: 30px;
 				}
-			}			
+			}
 		}
-
 	}
-
-			.title {
-				position: relative;
-				height: 40px;
-				line-height: 40px;
-				color: #333;
-				font-size: 14px;
-				padding: 0 15px;
-				font-weight: 700;
-			}
-			.title::after {
-				position: absolute;
-				content: '';
-				height: 20px;
-				width: 5px;
-				top: 50%;
-				margin-top: -9px;
-				left: 0;
-				background: #58a1ff;
-			}
-			
-
+	
+	.title {
+		position: relative;
+		height: 40px;
+		line-height: 40px;
+		color: #333;
+		font-size: 14px;
+		padding: 0 15px;
+		font-weight: 700;
+	}
+	
+	.title::after {
+		position: absolute;
+		content: '';
+		height: 20px;
+		width: 5px;
+		top: 50%;
+		margin-top: -9px;
+		left: 0;
+		background: #58a1ff;
+	}
 	
 	.dateSelectBox {
 		height: 0;
@@ -323,11 +466,10 @@
 					width: 80px;
 					font-size: 14px;
 				}
-				.nowdate{
+				.nowdate {
 					font-size: 14px;
 					text-align: center;
 				}
-				
 				.closeBtn {
 					top: 0;
 					left: 10px;
@@ -336,12 +478,21 @@
 				.selectBtn {
 					top: 0;
 					right: 10px;
-					color:#58A1FF;
+					color: #58A1FF;
 					text-align: right;
 				}
 			}
 		}
 	}
-			
-
+	
+	.submit-btn {
+		background: #58a1ff;
+		color: #fff;
+		width: 300px;
+		margin-top: 50px;
+		border-radius: 100px;
+		&.active {
+			opacity: 0.8;
+		}
+	}
 </style>

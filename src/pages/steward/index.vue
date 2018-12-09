@@ -11,7 +11,11 @@
 					<p class="model">型号：{{piano.model}}</p>
 					<p class="number">序列号：{{piano.serialNo}}</p>
 					<div class="status">保养等级： <span class="statusMark">{{piano.levelName}}</span>
-					<image v-if="piano.levelName=='中'" class="statusImg" src="../../static/img/icon_v32x.png" /> </div>
+					<image v-if="piano.levelName=='差'" class="statusImg" src="../../static/img/icon_v12x.png" />	
+					<image v-if="piano.levelName=='中'" class="statusImg" src="../../static/img/icon_v22x.png" />
+					<image v-if="piano.levelName=='好'" class="statusImg" src="../../static/img/icon_v32x.png" />
+					<image v-if="piano.levelName=='很好'" class="statusImg" src="../../static/img/icon_v42x.png" />
+					</div>
 				</div>
 				<div class="chioosPiano">
 					<div class="chioosBtn" @tap="linkTo('pianoSelect')" >
@@ -57,11 +61,14 @@
 
 				<div class="title">
 					上次维护：<span class="sub-title">{{piano.maintainDate}}</span>
+					
+					<span class="moer" @tap="linkTo('history')" >更多></span>
+					
 				</div>
 				
 				<div class="btn-box">
 					<div class="btn">
-						<div class="submit-btn" >智能分析我的需求</div>
+						<div class="submit-btn" @tap="guessMyNeed" >智能分析我的需求</div>
 					</div>
 					<div class="btn">
 						<div class="plain-btn" @tap="linkTo('serRequest')"  >提出请求</div>
@@ -72,29 +79,9 @@
 				
 				<div class="options-content">
 					<ul class="opt-list">
-						<li class="opt-item" >
-							<div class="check-box"></div>
-							调律
-						</li>
-						<li class="opt-item" >
-							<div class="check-box"></div>
-							整音
-						</li>
-						<li class="opt-item" >
-							<div class="check-box"></div>
-							检查
-						</li>
-						<li class="opt-item" >
-							<div class="check-box"></div>
-							清洁
-						</li>
-						<li class="opt-item" >
-							<div class="check-box"></div>
-							调整
-						</li>
-						<li class="opt-item" >
-							<div class="check-box"></div>
-							其他
+						<li class="opt-item" v-for="(item,index) in options" :key="index" @click="checkItem(item.code,index)">
+							<div class="check-box" v-bind:class="{'active':item.checked}"></div>
+							{{item.name}}
 						</li>
 					</ul>
 				</div>
@@ -110,7 +97,7 @@
 </template>
 
 <script>
-	import { myPianoList, myPianoInfo } from './srevice.js'
+	import { myPianoList, myPianoInfo,guessServer } from './srevice.js'
 	export default {
 		data() {
 			return {
@@ -118,10 +105,87 @@
 				hInfo:{},
 				tInfo:{},
 				data:[],
+				items:[],
+				options: [{
+						code: 0,
+						name: '调律',
+						checked: false
+					},
+					{
+						code: 1,
+						name: '检查',
+						checked: false
+					},
+					{
+						code: 2,
+						name: '调整',
+						checked: false
+					},
+					{
+						code: 3,
+						name: '维修',
+						checked: false
+					},
+					{
+						code: 4,
+						name: '整音',
+						checked: false
+					},
+					{
+						code: 5,
+						name: '清洁',
+						checked: false
+					},
+					{
+						code: 6,
+						name: '搬运',
+						checked: false
+					},
+					{
+						code: 99,
+						name: '其他',
+						checked: false
+					},
+				]				
 			}
 		},
 
 		methods: {
+			checkItem(code, index) {
+				let idx = this.items.indexOf(code);
+				if(idx != -1) {
+					this.items.splice(idx, 1);
+					this.options[index].checked = false;
+				} else {
+					this.items.push(code);
+					this.options[index].checked = true;
+				};
+
+			},
+			guessMyNeed() {
+				let vm = this;
+				wx.showLoading({
+					title: '需求分析中...',
+				})
+				guessServer().then((res) => {
+
+					wx.hideLoading();
+					this.items = res;
+					this.options.forEach((item) => {
+						let idx = res.indexOf(item.code);
+						if(idx != -1) {
+							item.checked = true;
+						}
+					})
+				}).catch((res) => {
+					wx.showToast({
+						title: res.msg,
+						icon: 'none',
+						duration: 2000
+					})
+				})
+
+			},			
 			linkTo(path){
 				wx.navigateTo({
 						url: '../'+path+'/main'
@@ -402,6 +466,16 @@
 					font-size: 12px;
 					color: #666;
 				}
+				.moer{
+					height: 40px;
+					line-height: 40px;
+					width: 60px;
+					font-size: 12px;
+					float: right;
+					color: #519FFF;
+					text-align: right;
+				}
+				
 			}
 			.title::after {
 				position: absolute;
@@ -491,6 +565,10 @@
 					margin-top: -8px;
 					left: 28%;
 					background: #fff;
+					&.active {
+						background: #519FFF;
+						border-color: #519FFF;
+					}					
 				}
 			}
 			

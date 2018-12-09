@@ -10,4 +10,7 @@ export const myPianoInfo = (params = {}) => {
 }
 
 
+export const guessServer = (params = {}) => {
+	return requstGet(api.guessServer, params);
+}
 

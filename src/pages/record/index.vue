@@ -6,22 +6,22 @@
 		
 		<div class="info-content">
 			<ul class="info-list">
-				<li class="info-item fw">钢琴型号：<span class="value-txt">KAWAI23</span></li>
-				<li class="info-item fw">钢琴序列号：<span class="value-txt">KAWAI23</span></li>
-				<li class="info-item fw">服务日期：<span class="value-txt">KAWAI23</span></li>
-				<li class="info-item fw">服务内容：<span class="value-txt">KAWAI23</span></li>
-				<li class="info-item fw">服务情况：<span class="value-txt">KAWAI23</span></li>
-				<li class="info-item">服务时的温湿度：<span class="value-txt">KAWAI23</span></li>
-				<li class="info-item">因湿度管理造成问题：<span class="value-txt">KAWAI23</span></li>
-				<li class="info-item">脚踏操作：<span class="value-txt">KAWAI23</span></li>
-				<li class="info-item">击弦机操作：<span class="value-txt">KAWAI23</span></li>
-				<li class="info-item">琴键键盘操作：<span class="value-txt">KAWAI23</span></li>
-				<li class="info-item">琴弦状况：<span class="value-txt">KAWAI23</span></li>
+				<li class="info-item fw">钢琴型号：<span class="value-txt">{{info.model}}</span></li>
+				<li class="info-item fw">钢琴序列号：<span class="value-txt">{{info.serialNo}}</span></li>
+				<li class="info-item fw">服务日期：<span class="value-txt">{{info.maintainDate}}</span></li>
+				<li class="info-item fw">服务内容：<span class="value-txt">{{info.itemName}}</span></li>
+				<li class="info-item fw">服务情况：<span class="value-txt">{{info.serviceDesc}}</span></li>
+				<li class="info-item">服务时的温湿度：<span class="value-txt">{{info.temperature+'℃'}}，湿度{{info.humidity+'%'}}</span></li>
+				<li class="info-item">因湿度管理造成问题：<span class="value-txt">{{info.humidityProblem}}</span></li>
+				<li class="info-item">脚踏操作：<span class="value-txt">{{info.pedalProblem}}</span></li>
+				<li class="info-item">击弦机操作：<span class="value-txt">{{info.rennerProblem}}</span></li>
+				<li class="info-item">琴键键盘操作：<span class="value-txt">{{info.keyboardProblem}}</span></li>
+				<li class="info-item">琴弦状况：<span class="value-txt">{{info.musicwireProblem}}</span></li>
 			</ul>
 		</div>
 
 	
-			<div class="btn">
+			<div class="btn" @tap="back"  >
 				历史记录
 			</div>
 
@@ -33,20 +33,47 @@
 </template>
 
 <script>
-	import { getDetail } from './srevice.js';
+	import { getServerInfo } from './srevice.js';
 
 	export default {
 		data() {
 			return {
-
+				info:{}
 			}
 		},
 
 		methods: {
-
+			back(){
+				wx.navigateBack({
+				    delta: 1
+				})				
+			},
+			_getServerInfo(id){
+				wx.showLoading({
+					title: '数据加载中...',
+				})					
+				getServerInfo({id:id}).then((res)=>{
+					wx.hideLoading();
+					this.info = res;					
+				}).catch((res)=>{
+					
+					wx.showToast({
+						title: res.msg,
+						icon: 'none',
+						duration: 2000
+					})					
+					
+				})
+				
+			}
 		
 		},
+		 onLoad: function(option){
 
+		    let id = option.id;
+		    this._getServerInfo(id);
+		    
+		  },
 		onReady() {
 
 		}

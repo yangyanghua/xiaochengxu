@@ -10,22 +10,10 @@
 		
 		<div class="data-list">
 
-			<ul class="info-list">
-				<li class="info-item" >2017年11月17日</li>
-				<li class="info-item" >调律</li>
-				<li class="info-item" >连结</li>
-			</ul>
-
-			<ul class="info-list">
-				<li class="info-item" >2017年11月17日</li>
-				<li class="info-item" >调律</li>
-				<li class="info-item" >连结</li>
-			</ul>
-
-			<ul class="info-list">
-				<li class="info-item" >2017年11月17日</li>
-				<li class="info-item" >调律</li>
-				<li class="info-item" >连结</li>
+			<ul class="info-list" v-for="(item,index) in data" :key="index" >
+				<li class="info-item" >{{item.maintainDate}}</li>
+				<li class="info-item" >{{item.itemName}}</li>
+				<li class="info-item btn" @tap="linkTo(item.maintainId)" >查看</li>
 			</ul>
 
 		</div>
@@ -44,22 +32,49 @@
 </template>
 
 <script>
-	import { getDetail } from './srevice.js';
+	import { getServerList } from './srevice.js';
 
 	export default {
 		data() {
 			return {
-
+				data:[],
+				form:{
+					pageIndex:0,
+					pageSize:100
+				}
 			}
 		},
 
 		methods: {
-
+			linkTo(id){
+				console.log(id);
+				wx.navigateTo({
+						url: '../record/main?id='+id
+					})
+				
+			},			
+			_getServerList(opt){
+				wx.showLoading({
+					title: '数据加载中...',
+				})				
+				getServerList(opt).then((res)=>{
+					wx.hideLoading();
+					this.data = res
+					
+				}).catch((res)=>{
+					wx.showToast({
+						title: res.msg,
+						icon: 'none',
+						duration: 2000
+					})						
+				})
+				
+			}
 		
 		},
 
 		onReady() {
-
+			this._getServerList(this.form);
 		}
 	}
 </script>
@@ -130,6 +145,9 @@
 				text-overflow: ellipsis;
 				white-space: nowrap;
 				text-align: center;
+				&.btn{
+					color: #519FFF;
+				}
 			}
 			
 		}
