@@ -11,6 +11,7 @@ export const myPianoList  ='/myPiano/list';
 export const myPianoInfo  ='/myPiano/info';
 export const humidity  ='/myPiano/humidity';
 export const temperature  ='/myPiano/temperature';
+export const pianoRegister  ='/myPiano/register';
 
 
 //服务
@@ -20,5 +21,11 @@ export const getServerList  ='/maintain/list';
 export const submitServer  ='/maintain/submit';
 
 
+//会员
+export const login  ='/member/login';//登录
+export const loginByCode  ='/member/loginByCode';//登录
+export const register  ='/member/register';//注册
+export const sendLoginCode  ='/member/sendLoginCode';//登录验证码
+export const sendRegisterCode  ='/member/sendRegisterCode';//注册验证码
 
 

@@ -1,10 +1,9 @@
 import {api,requstPost,requstGet} from '@/common/http/index.js';
 import qs from 'qs';
 
-export const queryByBrand = (params = {}) => {
-	return requstPost(api.queryByBrand, JSON.stringify(params));
+export const pianoRegister = (params = {}) => {
+	return requstPost(api.pianoRegister, JSON.stringify(params),'application/json;charset=UTF-8;');
 }
 
-export const queryBySn = (params = {}) => {
-	return requstPost(api.queryBySn, JSON.stringify(params));
-}
+
+

@@ -2,22 +2,23 @@
 	<div class="main-content">		
 	<div class="input-box account">
 		<image src="../../static/img/icon_user2x.png" class="input-icon" />
-		<input class="input-text" placeholder="请输入手机号码" type="text"  />
+		<input class="input-text" v-model="form.phone"  placeholder="请输入手机号码" type="text"  />
 	</div>
 
 	<div class="input-box psd">
 		<image src="../../static/img/icon_verification_code2x.png" class="input-icon" />
-		<input class="input-text" type="password"  placeholder="请输入验证码"  />
-		<span class="txt-btn">获取验证码</span>
+		<input class="input-text" type="number" v-model="form.code"  placeholder="请输入验证码"  />
+		<span class="txt-btn" v-if="!isSending" @tap="getCode" >获取验证码</span>
+		<span class="txt-btn loading" v-if="isSending">重新获取（{{tiem}}）</span>
 	</div>
 
 	<div class="input-box psd">
 		<image src="../../static/img/icon_password2x.png" class="input-icon" />
-		<input class="input-text" type="password"  placeholder="请输入密码"  />
+		<input class="input-text" type="password" v-model="form.password"  placeholder="请输入密码" />
 	</div>
 
-	<button class="submit-btn"  hover-class="active" @tap="submitData" >立即注册</button>
-	
+	<button class="submit-btn"  v-if="!loading" hover-class="active" @tap="submitData" >立即注册</button>
+	<button class="submit-btn loading" v-if="loading" :loading="loading" hover-class="active">注册中...</button>
 
 	<div class="btn-box">
 		   <image src="../../static/img/icon_success_fill2x.png" mode="aspectFit" class="check-icon" />    已阅读并同意 《<span class="txt-btn">用户服务协议</span>》
@@ -29,16 +30,145 @@
 </template>
 
 <script>
-	import { getDetail } from './srevice.js';
+	import { sendRegisterCode,register } from './srevice.js';
 	export default {
 		data() {
 			return {
-			
+				tiem:60,
+				loading:false,
+				isSending:false,
+				form:{
+					phone:'',
+					code:'',
+					password:''
+				}
 			}
 		},
 
 		methods: {
+			submitData(){
 
+				if(!this.form.phone) {
+					wx.showToast({
+						title: '请输入手机号码',
+						icon: 'none',
+						duration: 2000
+					});
+					return false;
+				};
+
+				if(this.form.phone.length != 11) {
+					wx.showToast({
+						title: '请输入正确的手机号码',
+						icon: 'none',
+						duration: 2000
+					});
+					return false;
+				};
+				
+				if(!this.form.code) {
+					wx.showToast({
+						title: '请输入验证码',
+						icon: 'none',
+						duration: 2000
+					});
+					return false;
+				};				
+				
+				
+				if(!this.form.password) {
+					wx.showToast({
+						title: '请输入密码',
+						icon: 'none',
+						duration: 2000
+					});
+					return false;
+				};					
+
+				this._register(this.form);
+				
+			},
+			
+			_register(opt){
+				this.loading = true;
+				register(opt).then((res)=>{
+					this.loading = false;
+					wx.showToast({
+						title: '注册成功！',
+						icon: 'success',
+						duration: 2000
+					});						
+					setTimeout(function() {
+						wx.navigateBack({
+							delta: 1
+						})	
+					}, 1500)					
+
+				}).catch((res)=>{
+					this.loading = false;
+					wx.showToast({
+						title: res.msg,
+						icon: 'none',
+						duration: 2000
+					});					
+				})
+				
+			},
+			
+			getCode() {
+				if(!this.form.phone) {
+					wx.showToast({
+						title: '请输入手机号码',
+						icon: 'none',
+						duration: 2000
+					});
+					return false;
+				};
+
+				if(this.form.phone.length != 11) {
+					wx.showToast({
+						title: '请输入正确的手机号码',
+						icon: 'none',
+						duration: 2000
+					});
+					return false;
+				};
+				this._sendRegisterCode(this.form.phone);
+
+			},
+			_sendRegisterCode(phone) {
+				let vm = this;
+				sendRegisterCode({
+					phone: phone
+				}).then((res) => {
+
+					vm.isSending = true;
+					wx.showToast({
+						title: '验证码已发送',
+						icon: 'none',
+						duration: 2000
+					});
+					let i = 60;
+					let interval = setInterval(function() {
+						i--;
+						vm.tiem = i;
+						if(i <= 0) {
+							clearInterval(interval);
+							vm.isSending = false;
+						}
+					}, 1000);
+
+				}).catch((res) => {
+
+					wx.showToast({
+						title: res.msg,
+						icon: 'none',
+						duration: 2000
+					});
+
+				})
+
+			}
 
 		},
 
@@ -114,6 +244,9 @@
 			&.active {
 				opacity: 0.8;
 			}
+			&.loading{
+				opacity: 0.4;
+			}
 		}	
 		
 		.line-text{
@@ -167,5 +300,8 @@
 				text-decoration: underline;
 				color: #58a1ff;				
 			}
+			&.loading {
+				opacity: 0.5;
+			}			
 		}
 </style>

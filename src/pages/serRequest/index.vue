@@ -87,7 +87,7 @@
 	let d = date.getDate();
 	let h = date.getHours();
 	let min = date.getMinutes();
-	let value = [0, m, d - 1, 1];
+	let value = [0, m-1, d - 1, 1];
 	let years = [];
 	let days = [];
 	let months = [];
