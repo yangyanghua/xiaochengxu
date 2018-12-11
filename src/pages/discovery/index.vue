@@ -31,8 +31,8 @@
 		<div class="bot-content">
 
 			<!--<button class="submit-btn" hover-class="active" @tap="submitData" >开始查询</button>-->
-			<button class="submit-btn" v-if="!searchBtnShow"    open-type="getUserInfo" @getuserinfo="bindGetUserInfo">开始查询</button>
-			<button class="submit-btn" v-if="searchBtnShow" :loading="loading" :disabled="loading" hover-class="active" @tap="submitData" >开始查询</button>
+<!--			<button class="submit-btn" v-if="!searchBtnShow"    open-type="getUserInfo" @getuserinfo="bindGetUserInfo">开始查询</button>-->
+			<button class="submit-btn"  :loading="loading" :disabled="loading" hover-class="active" @tap="submitData" >开始查询</button>
 			
 			<div class="info-content" v-if="data.length > 0" >
 
@@ -110,6 +110,7 @@ import {authenticity} from './srevice.js'
 				userInfo: {},
 				data:[],
 				loading:false,
+				isLogin:false,
 				form:{
 					brandCN:'',
 					serialNo:''
@@ -125,6 +126,26 @@ import {authenticity} from './srevice.js'
 				 this.searchBtnShow = true;
 			},
 			submitData(){
+				if(!this.isLogin){
+					wx.showModal({
+					  title: '提示',
+					  content: '登录后才可以使用该功能',
+					  confirmText:'立即登录',
+					  confirmColor:'#519FFF',
+					  success (res) {
+					    if (res.confirm) {
+					      
+							wx.navigateTo({
+									url: '../login/main'
+								})	
+
+					    } else if (res.cancel) {
+					      console.log('用户点击取消')
+					    }
+					  }
+					})	
+					return false;
+				};		
 				if(!this.form.brandCN){
 					wx.showToast({
 						title: '请输入钢琴品牌',
@@ -175,25 +196,30 @@ import {authenticity} from './srevice.js'
 			}
 			
 		},
+		 onLoad: function(option){
+
+		    let brand = option.brand;
+		    this.form.brandCN = brand;
+		    console.log(brand);
+			let vm = this;
+				wx.getStorage({
+					key: 'isLogin',
+					success: function(res) {
+						vm.isLogin = res.data;
+					},
+					fail:function(){
+						vm.isLogin = false;
+					}
+				})			    
+		    
+		    
+		    
+		    
+		 },		
 		onReady() {
 			let vm = this;
-			wx.getSetting({
-			  success(res) {
-			    if (!res.authSetting['scope.userInfo']) {
-			    	
-			    	vm.searchBtnShow = false;
-			    	
-			    }else{
-			          wx.getUserInfo({
-			            success: function(res) {
-			              //console.log(res.userInfo)
-			              vm.img = res.userInfo.avatarUrl;
-			            }
-			          })
-			    	vm.searchBtnShow = true;
-			    }
-			  }
-			})		
+			
+			
 
 		},
 	}

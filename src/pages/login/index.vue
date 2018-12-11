@@ -119,6 +119,15 @@
 						icon: 'success',
 						duration: 2000
 					});
+						wx.setStorage({
+							key: 'isLogin',
+							data: true,	
+							success: function(res) {
+								
+							},
+							fail:function(){
+							}
+						})						
 					setTimeout(function() {
 						wx.switchTab({
 							url: '../index/main'
@@ -145,6 +154,15 @@
 						icon: 'success',
 						duration: 2000
 					});
+						wx.setStorage({
+							key: 'isLogin',
+							data: true,	
+							success: function(res) {
+								
+							},
+							fail:function(){
+							}
+						})						
 					setTimeout(function() {
 						wx.switchTab({
 							url: '../index/main'

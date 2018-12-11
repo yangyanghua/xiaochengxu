@@ -29,3 +29,11 @@ export const sendLoginCode  ='/member/sendLoginCode';//登录验证码
 export const sendRegisterCode  ='/member/sendRegisterCode';//注册验证码
 
 
+//搜索
+export const searchHot  ='/search/hot';//热门
+export const search  ='/search/query';//
+
+
+
+
+

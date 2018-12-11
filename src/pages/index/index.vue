@@ -2,7 +2,7 @@
 	<div class="main-content">
 		<div class="header">
 			<div class="heItem seach">
-				<div class="btn seachBtn">
+				<div class="btn seachBtn" @click="linkToBar" > 
 					<image class="search" src="../../static/img/icon_search2x.png" /> 搜索
 				</div>
 			</div>
@@ -91,6 +91,7 @@
 		data() {
 			return {
 				banner:[],
+				isLogin:false,
 				recommend:[],
 				article:[],
 				indicatorDots: false,
@@ -102,10 +103,37 @@
 		},
 
 		methods: {
+			linkToBar(){
+						wx.switchTab({
+							url: '../search/main'
+						});				
+			},
 			linkTo(path){
-				wx.navigateTo({
-						url: '../'+path+'/main'
-					})
+				if(this.isLogin){
+					wx.navigateTo({
+							url: '../'+path+'/main'
+						})					
+				}else{
+					wx.showModal({
+					  title: '提示',
+					  content: '登录后才可以使用该功能',
+					  confirmText:'立即登录',
+					  confirmColor:'#519FFF',
+					  success (res) {
+					    if (res.confirm) {
+					      
+							wx.navigateTo({
+									url: '../login/main'
+								})	
+
+					    } else if (res.cancel) {
+					      console.log('用户点击取消')
+					    }
+					  }
+					})					
+				}
+				
+
 				
 			},
 			_getIndexCarousel(){
@@ -155,6 +183,19 @@
 			}
 		
 		},
+		onShow() {
+			let vm = this;
+				wx.getStorage({
+					key: 'isLogin',
+					success: function(res) {
+						vm.isLogin = res.data;
+					},
+					fail:function(){
+						vm.isLogin = false;
+					}
+				})			
+			
+		},			
 		onReady() {
 			
 			this._getIndexCarousel();
