@@ -26,17 +26,17 @@
 					<img class="nav-image" src="../../static/img/icon_query2x.png" />
 					<p class="nav-txt">真伪查询</p>
 				</li>
-				<li class="navitem" @tap="linkTo('pianoRegister')" >
+				<li class="navitem" @tap="linkTo('steward')" >
 					<img class="nav-image" src="../../static/img/icon_register2x.png" />
-					<p class="nav-txt">钢琴注册</p>
+					<p class="nav-txt">钢琴管家</p>
 				</li>
 				<li class="navitem" @tap="linkTo('serRequest')" >
 					<img class="nav-image" src="../../static/img/icon_service2x.png" />
 					<p class="nav-txt">我要服务</p>
 				</li>
-				<li class="navitem" @tap="linkTo('steward')" >
-					<img class="nav-image" src="../../static/img/icon_housekeepe2x.png" />
-					<p class="nav-txt">智能管家</p>
+				<li class="navitem" @tap="linkTo('pianoRegister')" >
+					<img class="nav-image" src="../../static/img/register2x.png" />
+					<p class="nav-txt">保用登记</p>
 				</li>
 
 			</ul>
@@ -267,7 +267,7 @@
 	}
 	
 	.swiperContent {
-		height: 160px;
+		height: 180px;
 		background: #fff;
 	}
 	
@@ -275,7 +275,7 @@
 		width: 100%;
 		height: 150px;
 		border-radius: 4px;
-		box-shadow: 0 0 10px -1px #000;
+		box-shadow: 0 3px 9px -3px #000;
 	}
 	
 	.image-box {

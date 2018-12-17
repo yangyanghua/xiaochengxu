@@ -12,7 +12,7 @@
 						<input class="seachInput" v-model="form.brandCN"  placeholder="钢琴品牌" />
 					</div>
 					<div class="btn-box">
-						<image class="seach-iocn" src="../../static/img/seach1.png" />
+						<image class="seach-iocn" src="../../static/img/search1.png" />
 					</div>
 				</div>
 				<div class="form-item">

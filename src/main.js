@@ -38,7 +38,7 @@ export default {
 			},{
 				"iconPath": './static/img/icon_find2x.png',
 				"selectedIconPath": './static/img/icon_find_press2x.png',
-				"pagePath": "pages/discovery/main",
+				"pagePath": "pages/personal/main",
 				"text": "发现"		
 			}, {
 				"iconPath": './static/img/icon_my2x.png',

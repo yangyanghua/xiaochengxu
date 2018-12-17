@@ -62,7 +62,7 @@
 
 		methods: {
 			linkTo(brand) {
-				wx.reLaunch({
+				wx.navigateTo({
 					url: '../discovery/main?brand=' + brand
 				});
 

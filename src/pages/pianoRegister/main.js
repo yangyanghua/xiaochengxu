@@ -7,7 +7,7 @@ export default {
   config: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#58a1ff',
-      navigationBarTitleText: '钢琴注册',
+      navigationBarTitleText: '保用登记',
       navigationBarTextStyle: '#fff'
   }
 }

@@ -15,7 +15,7 @@ const requstPost = function(url, data, header) {
 	return requst(httpService + url, 'POST', data, header);
 }
 
-//封装Request请求方法
+//封装Request请求方法  
 
 function requst(url, method, data = {}, header = 'application/x-www-form-urlencoded;charset=UTF-8;') {
 	wx.showNavigationBarLoading();
